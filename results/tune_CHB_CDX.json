@@ -1,0 +1,90 @@
+[
+  {
+    "config": "baseline",
+    "acc": 0.6018473307291666,
+    "params": 226177,
+    "width": 64,
+    "n_dilations": 9,
+    "window": 4096,
+    "epochs": 15,
+    "lr": 0.001,
+    "fst": 0.008249320183740513
+  },
+  {
+    "config": "wide",
+    "acc": 0.6036955515543619,
+    "params": 894721,
+    "width": 128,
+    "n_dilations": 9,
+    "window": 4096,
+    "epochs": 15,
+    "lr": 0.001,
+    "fst": 0.008249320183740513
+  },
+  {
+    "config": "narrow",
+    "acc": 0.6050402323404948,
+    "params": 57793,
+    "width": 32,
+    "n_dilations": 9,
+    "window": 4096,
+    "epochs": 15,
+    "lr": 0.001,
+    "fst": 0.008249320183740513
+  },
+  {
+    "config": "deeper",
+    "acc": 0.6267598470052084,
+    "params": 251137,
+    "width": 64,
+    "n_dilations": 10,
+    "window": 4096,
+    "epochs": 15,
+    "lr": 0.001,
+    "fst": 0.008249320183740513
+  },
+  {
+    "config": "shallow",
+    "acc": 0.6122207641601562,
+    "params": 151297,
+    "width": 64,
+    "n_dilations": 6,
+    "window": 4096,
+    "epochs": 15,
+    "lr": 0.001,
+    "fst": 0.008249320183740513
+  },
+  {
+    "config": "long-window",
+    "acc": 0.6240351994832357,
+    "params": 226177,
+    "width": 64,
+    "n_dilations": 9,
+    "window": 8192,
+    "epochs": 15,
+    "lr": 0.001,
+    "fst": 0.008249320183740513
+  },
+  {
+    "config": "more-epochs",
+    "acc": 0.6100444793701172,
+    "params": 226177,
+    "width": 64,
+    "n_dilations": 9,
+    "window": 4096,
+    "epochs": 40,
+    "lr": 0.001,
+    "fst": 0.008249320183740513
+  },
+  {
+    "config": "lower-lr",
+    "acc": 0.5979766845703125,
+    "params": 226177,
+    "width": 64,
+    "n_dilations": 9,
+    "window": 4096,
+    "epochs": 30,
+    "lr": 0.0003,
+    "fst": 0.008249320183740513
+  }
+]

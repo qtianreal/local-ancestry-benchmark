@@ -1,0 +1,142 @@
+[
+  {
+    "config": "groupnorm",
+    "seed": 0,
+    "acc": 0.6018473307291666,
+    "acc_batch_stats": 0.6018473307291666,
+    "discrepancy": 0.0,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "groupnorm",
+    "seed": 1,
+    "acc": 0.621490478515625,
+    "acc_batch_stats": 0.621490478515625,
+    "discrepancy": 0.0,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "groupnorm",
+    "seed": 2,
+    "acc": 0.6170838673909506,
+    "acc_batch_stats": 0.6170838673909506,
+    "discrepancy": 0.0,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "groupnorm",
+    "seed": 3,
+    "acc": 0.5964876810709635,
+    "acc_batch_stats": 0.5964876810709635,
+    "discrepancy": 0.0,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "groupnorm",
+    "seed": 4,
+    "acc": 0.6185092926025391,
+    "acc_batch_stats": 0.6185092926025391,
+    "discrepancy": 0.0,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "batchnorm",
+    "seed": 0,
+    "acc": 0.5662727355957031,
+    "acc_batch_stats": 0.5690263112386068,
+    "discrepancy": -0.002753575642903683,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "batchnorm",
+    "seed": 1,
+    "acc": 0.5723387400309244,
+    "acc_batch_stats": 0.5804131825764974,
+    "discrepancy": -0.00807444254557299,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "batchnorm",
+    "seed": 2,
+    "acc": 0.6016699473063151,
+    "acc_batch_stats": 0.5965372721354166,
+    "discrepancy": 0.0051326751708984375,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "batchnorm",
+    "seed": 3,
+    "acc": 0.5605258941650391,
+    "acc_batch_stats": 0.5565560658772787,
+    "discrepancy": 0.00396982828776038,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "batchnorm",
+    "seed": 4,
+    "acc": 0.579504648844401,
+    "acc_batch_stats": 0.5822963714599609,
+    "discrepancy": -0.002791722615559933,
+    "params": 226177,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  }
+]

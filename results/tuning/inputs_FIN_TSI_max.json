@@ -1,0 +1,162 @@
+[
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "freq",
+    "seed": 0,
+    "in_ch": 4,
+    "acc": 0.7226072947184244,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 65.875,
+    "length_ratio": 0.7047395524350181,
+    "bp_error_snps": 707.7818181818182
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "freq",
+    "seed": 1,
+    "in_ch": 4,
+    "acc": 0.7171001434326172,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 51.29340277777777,
+    "length_ratio": 0.7414549971568262,
+    "bp_error_snps": 869.1727272727272
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "freq",
+    "seed": 2,
+    "in_ch": 4,
+    "acc": 0.7221043904622396,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 52.0078125,
+    "length_ratio": 0.7066817265915054,
+    "bp_error_snps": 699.0909090909091
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "freq",
+    "seed": 3,
+    "in_ch": 4,
+    "acc": 0.7129421234130859,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 53.119791666666664,
+    "length_ratio": 0.7223250913188659,
+    "bp_error_snps": 795.0909090909091
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "freq",
+    "seed": 4,
+    "in_ch": 4,
+    "acc": 0.7268136342366537,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 46.220052083333336,
+    "length_ratio": 0.8129786998921946,
+    "bp_error_snps": 828.6181818181818
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "haplo",
+    "seed": 0,
+    "in_ch": 8,
+    "acc": 0.7877457936604818,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 32.88454861111111,
+    "length_ratio": 0.83309636164923,
+    "bp_error_snps": 689.8454545454546
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "haplo",
+    "seed": 1,
+    "in_ch": 8,
+    "acc": 0.7689781188964844,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 33.16059027777778,
+    "length_ratio": 0.8926847020046319,
+    "bp_error_snps": 772.6272727272727
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "haplo",
+    "seed": 2,
+    "in_ch": 8,
+    "acc": 0.7828477223714193,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 35.67230902777778,
+    "length_ratio": 0.850521716855488,
+    "bp_error_snps": 742.3545454545455
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "haplo",
+    "seed": 3,
+    "in_ch": 8,
+    "acc": 0.7831897735595703,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 22.7734375,
+    "length_ratio": 0.8817039324571665,
+    "bp_error_snps": 781.790909090909
+  },
+  {
+    "pops": [
+      "FIN",
+      "TSI"
+    ],
+    "fst": 0.011978356302137982,
+    "features": "haplo",
+    "seed": 4,
+    "in_ch": 8,
+    "acc": 0.783050537109375,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 32.26215277777778,
+    "length_ratio": 0.8226117722513736,
+    "bp_error_snps": 856.1363636363636
+  }
+]

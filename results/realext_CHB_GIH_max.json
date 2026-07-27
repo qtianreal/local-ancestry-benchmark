@@ -1,0 +1,13 @@
+{
+  "pops": [
+    "CHB",
+    "GIH"
+  ],
+  "fst": 0.08042658358970069,
+  "n_sites": 44575,
+  "gen": 30,
+  "rfmix": 0.9639859085810432,
+  "rfmix_flipped": false,
+  "flare": 0.9781057206954571,
+  "flare_flipped": false
+}

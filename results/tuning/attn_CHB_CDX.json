@@ -1,0 +1,80 @@
+[
+  {
+    "config": "none",
+    "seed": 0,
+    "acc": 0.6018473307291666,
+    "params": 226177,
+    "pool": null,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "none",
+    "seed": 1,
+    "acc": 0.621490478515625,
+    "params": 226177,
+    "pool": null,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "none",
+    "seed": 2,
+    "acc": 0.6170838673909506,
+    "params": 226177,
+    "pool": null,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "attn-pooled",
+    "seed": 0,
+    "acc": 0.6131687164306641,
+    "params": 242945,
+    "pool": 16,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "attn-pooled",
+    "seed": 1,
+    "acc": 0.5930512746175131,
+    "params": 242945,
+    "pool": 16,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "attn-pooled",
+    "seed": 2,
+    "acc": 0.6170056660970052,
+    "params": 242945,
+    "pool": 16,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  }
+]

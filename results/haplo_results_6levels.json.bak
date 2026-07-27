@@ -1,0 +1,62 @@
+[
+  {
+    "split_time": 25,
+    "fst": 0.0016736824233874574,
+    "cnn_freq": 0.5867643356323242,
+    "cnn_haplo": 0.5738137563069662,
+    "delta": -0.012950579325358036,
+    "train_examples": 2304,
+    "test_examples": 768,
+    "seconds": 2340.5
+  },
+  {
+    "split_time": 50,
+    "fst": 0.006600762107399232,
+    "cnn_freq": 0.6435356140136719,
+    "cnn_haplo": 0.6587559382120768,
+    "delta": 0.015220324198404911,
+    "train_examples": 2304,
+    "test_examples": 768,
+    "seconds": 3116.7
+  },
+  {
+    "split_time": 100,
+    "fst": 0.010496542262551888,
+    "cnn_freq": 0.7732369105021158,
+    "cnn_haplo": 0.7590392430623373,
+    "delta": -0.014197667439778572,
+    "train_examples": 2304,
+    "test_examples": 768,
+    "seconds": 3200.6
+  },
+  {
+    "split_time": 200,
+    "fst": 0.018050751550675648,
+    "cnn_freq": 0.8927710851033529,
+    "cnn_haplo": 0.9035240809122721,
+    "delta": 0.010752995808919197,
+    "train_examples": 2304,
+    "test_examples": 768,
+    "seconds": 936.9
+  },
+  {
+    "split_time": 400,
+    "fst": 0.03639131428852295,
+    "cnn_freq": 0.953277587890625,
+    "cnn_haplo": 0.9622284571329752,
+    "delta": 0.008950869242350223,
+    "train_examples": 2304,
+    "test_examples": 768,
+    "seconds": 410.7
+  },
+  {
+    "split_time": 800,
+    "fst": 0.08127569478932742,
+    "cnn_freq": 0.9838136037190756,
+    "cnn_haplo": 0.9905468622843424,
+    "delta": 0.006733258565266853,
+    "train_examples": 2304,
+    "test_examples": 768,
+    "seconds": 403.9
+  }
+]

@@ -1,0 +1,162 @@
+[
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "freq",
+    "seed": 0,
+    "in_ch": 4,
+    "acc": 0.5165996551513672,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 8.699652777777779,
+    "length_ratio": 0.41473779269126565,
+    "bp_error_snps": 955.23
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "freq",
+    "seed": 1,
+    "in_ch": 4,
+    "acc": 0.5164635976155599,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 1.1336805555555556,
+    "length_ratio": 1.0921792328042328,
+    "bp_error_snps": 877.19
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "freq",
+    "seed": 2,
+    "in_ch": 4,
+    "acc": 0.5164693196614584,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 1.045138888888889,
+    "length_ratio": 1.115619967793881,
+    "bp_error_snps": 877.19
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "freq",
+    "seed": 3,
+    "in_ch": 4,
+    "acc": 0.5164934794108073,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 2.3984375,
+    "length_ratio": 0.8852463153386898,
+    "bp_error_snps": 1061.05
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "freq",
+    "seed": 4,
+    "in_ch": 4,
+    "acc": 0.5169804890950521,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 30.255208333333332,
+    "length_ratio": 0.3199220634847841,
+    "bp_error_snps": 866.64
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "haplo",
+    "seed": 0,
+    "in_ch": 8,
+    "acc": 0.6120026906331381,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 41.58116319444445,
+    "length_ratio": 0.6604083616625763,
+    "bp_error_snps": 625.22
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "haplo",
+    "seed": 1,
+    "in_ch": 8,
+    "acc": 0.6131521860758463,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 59.166666666666664,
+    "length_ratio": 0.6283702312749433,
+    "bp_error_snps": 713.23
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "haplo",
+    "seed": 2,
+    "in_ch": 8,
+    "acc": 0.6111806233723959,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 44.696180555555564,
+    "length_ratio": 0.6383435310720779,
+    "bp_error_snps": 855.89
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "haplo",
+    "seed": 3,
+    "in_ch": 8,
+    "acc": 0.6086088816324869,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 57.65321180555555,
+    "length_ratio": 0.5855593853960049,
+    "bp_error_snps": 668.93
+  },
+  {
+    "pops": [
+      "CEU",
+      "TSI"
+    ],
+    "fst": 0.002688194882273261,
+    "features": "haplo",
+    "seed": 4,
+    "in_ch": 8,
+    "acc": 0.611840565999349,
+    "reps": 6,
+    "n_ref": 92,
+    "n_tract_ratio": 52.865885416666664,
+    "length_ratio": 0.6208027285545857,
+    "bp_error_snps": 666.99
+  }
+]

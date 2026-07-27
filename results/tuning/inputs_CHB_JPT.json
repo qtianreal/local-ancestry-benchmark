@@ -1,0 +1,387 @@
+[
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "freq",
+    "seed": 0,
+    "in_ch": 4,
+    "acc": 0.7104523976643881,
+    "reps": 6,
+    "n_tract_ratio": 47.90928819444445,
+    "length_ratio": 0.7780967772090501,
+    "bp_error_snps": 831.2222222222222
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "freq",
+    "seed": 1,
+    "in_ch": 4,
+    "acc": 0.6907431284586588,
+    "reps": 6,
+    "n_tract_ratio": 43.146267361111114,
+    "length_ratio": 0.6912350806715892,
+    "bp_error_snps": 690.0
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "freq",
+    "seed": 2,
+    "in_ch": 4,
+    "acc": 0.6996949513753256,
+    "reps": 6,
+    "n_tract_ratio": 37.07986111111111,
+    "length_ratio": 0.8427963015229203,
+    "bp_error_snps": 912.3809523809524
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "freq",
+    "seed": 3,
+    "in_ch": 4,
+    "acc": 0.6764545440673828,
+    "reps": 6,
+    "n_tract_ratio": 36.3828125,
+    "length_ratio": 0.7337534405225595,
+    "bp_error_snps": 734.7777777777778
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "freq",
+    "seed": 4,
+    "in_ch": 4,
+    "acc": 0.6946214040120443,
+    "reps": 6,
+    "n_tract_ratio": 40.21093749999999,
+    "length_ratio": 0.7677325918609815,
+    "bp_error_snps": 779.063492063492
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "haplo",
+    "seed": 0,
+    "in_ch": 8,
+    "acc": 0.6868623097737631,
+    "reps": 6,
+    "n_tract_ratio": 32.236111111111114,
+    "length_ratio": 0.8503011779126964,
+    "bp_error_snps": 832.1507936507936
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "haplo",
+    "seed": 1,
+    "in_ch": 8,
+    "acc": 0.6703014373779297,
+    "reps": 6,
+    "n_tract_ratio": 29.525607638888886,
+    "length_ratio": 0.8757277769092529,
+    "bp_error_snps": 957.436507936508
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "haplo",
+    "seed": 2,
+    "in_ch": 8,
+    "acc": 0.6701793670654297,
+    "reps": 6,
+    "n_tract_ratio": 32.453125,
+    "length_ratio": 0.8636418874685289,
+    "bp_error_snps": 883.6666666666666
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "haplo",
+    "seed": 3,
+    "in_ch": 8,
+    "acc": 0.6688092549641927,
+    "reps": 6,
+    "n_tract_ratio": 22.047309027777775,
+    "length_ratio": 0.9314882333865495,
+    "bp_error_snps": 901.4126984126984
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "haplo",
+    "seed": 4,
+    "in_ch": 8,
+    "acc": 0.6819814046223959,
+    "reps": 6,
+    "n_tract_ratio": 29.348524305555557,
+    "length_ratio": 0.8579935905982804,
+    "bp_error_snps": 1047.142857142857
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "both",
+    "seed": 0,
+    "in_ch": 9,
+    "acc": 0.6648654937744141,
+    "reps": 6,
+    "n_tract_ratio": 35.774739583333336,
+    "length_ratio": 0.8792445826608635,
+    "bp_error_snps": 852.5238095238095
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "both",
+    "seed": 1,
+    "in_ch": 9,
+    "acc": 0.6790440877278646,
+    "reps": 6,
+    "n_tract_ratio": 45.221354166666664,
+    "length_ratio": 0.85705601281645,
+    "bp_error_snps": 929.7301587301587
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "both",
+    "seed": 2,
+    "in_ch": 9,
+    "acc": 0.6719894409179688,
+    "reps": 6,
+    "n_tract_ratio": 38.83159722222222,
+    "length_ratio": 0.833593546761708,
+    "bp_error_snps": 821.1984126984127
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "both",
+    "seed": 3,
+    "in_ch": 9,
+    "acc": 0.6659475962320963,
+    "reps": 6,
+    "n_tract_ratio": 34.73784722222222,
+    "length_ratio": 0.8340692146347811,
+    "bp_error_snps": 863.515873015873
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "both",
+    "seed": 4,
+    "in_ch": 9,
+    "acc": 0.6682186126708984,
+    "reps": 6,
+    "n_tract_ratio": 31.000434027777782,
+    "length_ratio": 0.9076093419468165,
+    "bp_error_snps": 900.6111111111111
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "mlen",
+    "seed": 0,
+    "in_ch": 8,
+    "acc": 0.7056331634521484,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 34.70399305555555,
+    "length_ratio": 0.8701552904614648,
+    "bp_error_snps": 806.7301587301587
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "mlen",
+    "seed": 1,
+    "in_ch": 8,
+    "acc": 0.7002824147542318,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 23.237413194444443,
+    "length_ratio": 0.9204811850755465,
+    "bp_error_snps": 763.8015873015873
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "mlen",
+    "seed": 2,
+    "in_ch": 8,
+    "acc": 0.6894912719726562,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 22.999565972222218,
+    "length_ratio": 0.8927190750639262,
+    "bp_error_snps": 778.531746031746
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "mlen",
+    "seed": 3,
+    "in_ch": 8,
+    "acc": 0.6894454956054688,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 25.993489583333332,
+    "length_ratio": 0.9123150245774418,
+    "bp_error_snps": 853.9761904761905
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "mlen",
+    "seed": 4,
+    "in_ch": 8,
+    "acc": 0.7023321787516276,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 29.899739583333332,
+    "length_ratio": 0.854912470535314,
+    "bp_error_snps": 745.8412698412699
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "hapmlen",
+    "seed": 0,
+    "in_ch": 12,
+    "acc": 0.6922702789306641,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 19.890625,
+    "length_ratio": 0.9262601824088446,
+    "bp_error_snps": 866.8174603174604
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "hapmlen",
+    "seed": 1,
+    "in_ch": 12,
+    "acc": 0.6886622111002604,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 23.529947916666668,
+    "length_ratio": 0.8712445056318252,
+    "bp_error_snps": 795.2063492063492
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "hapmlen",
+    "seed": 2,
+    "in_ch": 12,
+    "acc": 0.6923338572184244,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 18.01605902777778,
+    "length_ratio": 0.8780698081524285,
+    "bp_error_snps": 739.2698412698413
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "hapmlen",
+    "seed": 3,
+    "in_ch": 12,
+    "acc": 0.697540283203125,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 19.273871527777775,
+    "length_ratio": 0.9076268958918602,
+    "bp_error_snps": 846.3968253968254
+  },
+  {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.00831116613454643,
+    "features": "hapmlen",
+    "seed": 4,
+    "in_ch": 12,
+    "acc": 0.6929232279459635,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 22.861111111111114,
+    "length_ratio": 0.8743349037652086,
+    "bp_error_snps": 824.8412698412699
+  }
+]

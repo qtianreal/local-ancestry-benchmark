@@ -1,0 +1,80 @@
+[
+  {
+    "config": "none",
+    "seed": 0,
+    "acc": 0.6018473307291666,
+    "params": 226177,
+    "d_state": null,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "none",
+    "seed": 1,
+    "acc": 0.621490478515625,
+    "params": 226177,
+    "d_state": null,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "none",
+    "seed": 2,
+    "acc": 0.6170838673909506,
+    "params": 226177,
+    "d_state": null,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "mamba-lite",
+    "seed": 0,
+    "acc": 0.6179949442545573,
+    "params": 239492,
+    "d_state": 1,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "mamba-lite",
+    "seed": 1,
+    "acc": 0.6264025370279948,
+    "params": 239492,
+    "d_state": 1,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  },
+  {
+    "config": "mamba-lite",
+    "seed": 2,
+    "acc": 0.6130415598551432,
+    "params": 239492,
+    "d_state": 1,
+    "fst": 0.008249320183740513,
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "epochs": 15
+  }
+]

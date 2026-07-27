@@ -1,0 +1,13 @@
+{
+  "pops": [
+    "CEU",
+    "TSI"
+  ],
+  "fst": 0.002688194882273261,
+  "n_sites": 43151,
+  "gen": 30,
+  "rfmix": 0.5668647597969919,
+  "rfmix_flipped": false,
+  "flare": 0.5336909196774119,
+  "flare_flipped": false
+}

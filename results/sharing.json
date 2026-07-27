@@ -1,0 +1,110 @@
+[
+  {
+    "source": "simulated",
+    "label": "T=25",
+    "fst": 0.002219403369597443,
+    "match_accuracy": 0.5565643310546875,
+    "match_accuracy_sd": 0.03260984060235232,
+    "match_margin": 0.0020315304519780983,
+    "reps": 3
+  },
+  {
+    "source": "simulated",
+    "label": "T=50",
+    "fst": 0.00636534318232158,
+    "match_accuracy": 0.542877197265625,
+    "match_accuracy_sd": 0.03157092423302816,
+    "match_margin": 0.0022105344407015825,
+    "reps": 3
+  },
+  {
+    "source": "simulated",
+    "label": "T=100",
+    "fst": 0.00943397371659266,
+    "match_accuracy": 0.6159553527832031,
+    "match_accuracy_sd": 0.013095775522145251,
+    "match_margin": 0.005078327280013195,
+    "reps": 3
+  },
+  {
+    "source": "simulated",
+    "label": "T=200",
+    "fst": 0.019895967037368966,
+    "match_accuracy": 0.6900126139322916,
+    "match_accuracy_sd": 0.023247674940140826,
+    "match_margin": 0.007891394296854653,
+    "reps": 3
+  },
+  {
+    "source": "simulated",
+    "label": "T=400",
+    "fst": 0.03625850969025329,
+    "match_accuracy": 0.7838910420735677,
+    "match_accuracy_sd": 0.02265141075356954,
+    "match_margin": 0.015687989914474825,
+    "reps": 3
+  },
+  {
+    "source": "simulated",
+    "label": "T=800",
+    "fst": 0.0740061148967563,
+    "match_accuracy": 0.8608258565266927,
+    "match_accuracy_sd": 0.016428767637729547,
+    "match_margin": 0.02372075286921932,
+    "reps": 3
+  },
+  {
+    "source": "real",
+    "label": "CHB/CHS",
+    "fst": 0.0004179945227760906,
+    "match_accuracy": 0.5226313273111979,
+    "match_accuracy_sd": 0.009413482271985135,
+    "match_margin": -0.00039168783266014406,
+    "reps": 3
+  },
+  {
+    "source": "real",
+    "label": "CEU/TSI",
+    "fst": 0.002688194882273261,
+    "match_accuracy": 0.5210952758789062,
+    "match_accuracy_sd": 0.02721505465809516,
+    "match_margin": 0.0019625993498415856,
+    "reps": 3
+  },
+  {
+    "source": "real",
+    "label": "FIN/GBR",
+    "fst": 0.007445451874166397,
+    "match_accuracy": 0.5831527709960938,
+    "match_accuracy_sd": 0.021261091925788133,
+    "match_margin": 0.0036977229462829505,
+    "reps": 3
+  },
+  {
+    "source": "real",
+    "label": "CHB/CDX",
+    "fst": 0.008249320183740513,
+    "match_accuracy": 0.5666414896647135,
+    "match_accuracy_sd": 0.013483686745728425,
+    "match_margin": 0.00442617835128884,
+    "reps": 3
+  },
+  {
+    "source": "real",
+    "label": "TSI/PJL",
+    "fst": 0.03002455542723996,
+    "match_accuracy": 0.6405754089355469,
+    "match_accuracy_sd": 0.017842813571862317,
+    "match_margin": 0.009226326483855051,
+    "reps": 3
+  },
+  {
+    "source": "real",
+    "label": "CEU/GIH",
+    "fst": 0.03688582569562222,
+    "match_accuracy": 0.6917978922526041,
+    "match_accuracy_sd": 0.015894747618658042,
+    "match_margin": 0.011177158228810985,
+    "reps": 3
+  }
+]

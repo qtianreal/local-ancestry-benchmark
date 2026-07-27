@@ -1,0 +1,80 @@
+[
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "freq",
+    "seed": 0,
+    "budget": 20,
+    "sim_only": 0.7181491851806641,
+    "real_only": 0.6099071502685547,
+    "sim_plus_real": 0.7108205159505209
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "freq",
+    "seed": 1,
+    "budget": 20,
+    "sim_only": 0.6937128702799479,
+    "real_only": 0.6482931772867838,
+    "sim_plus_real": 0.6918125152587891
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "freq",
+    "seed": 2,
+    "budget": 20,
+    "sim_only": 0.7044855753580729,
+    "real_only": 0.6637643178304037,
+    "sim_plus_real": 0.7033735911051432
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "haplo",
+    "seed": 0,
+    "budget": 20,
+    "sim_only": 0.6275386810302734,
+    "real_only": 0.7099444071451823,
+    "sim_plus_real": 0.6981474558512369
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "haplo",
+    "seed": 1,
+    "budget": 20,
+    "sim_only": 0.6344572703043619,
+    "real_only": 0.7070477803548177,
+    "sim_plus_real": 0.6943372090657552
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "haplo",
+    "seed": 2,
+    "budget": 20,
+    "sim_only": 0.604272206624349,
+    "real_only": 0.6934331258138021,
+    "sim_plus_real": 0.6921819051106771
+  }
+]

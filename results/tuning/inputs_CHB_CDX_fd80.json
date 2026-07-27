@@ -1,0 +1,162 @@
+[
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "haplo",
+    "seed": 0,
+    "in_ch": 8,
+    "acc": 0.6800155639648438,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 34.03949652777778,
+    "length_ratio": 0.8134410176016574,
+    "bp_error_snps": 930.75
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "haplo",
+    "seed": 1,
+    "in_ch": 8,
+    "acc": 0.6806297302246094,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 29.880208333333332,
+    "length_ratio": 0.8535216336015649,
+    "bp_error_snps": 860.3833333333333
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "haplo",
+    "seed": 2,
+    "in_ch": 8,
+    "acc": 0.6718705495198568,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 35.552083333333336,
+    "length_ratio": 0.8581719338923128,
+    "bp_error_snps": 883.675
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "haplo",
+    "seed": 3,
+    "in_ch": 8,
+    "acc": 0.6770356496175131,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 28.014756944444443,
+    "length_ratio": 0.8672882523005736,
+    "bp_error_snps": 1042.1083333333333
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "haplo",
+    "seed": 4,
+    "in_ch": 8,
+    "acc": 0.680322011311849,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 24.371961805555557,
+    "length_ratio": 0.8703564677454176,
+    "bp_error_snps": 878.1583333333333
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "hapmlen",
+    "seed": 0,
+    "in_ch": 12,
+    "acc": 0.7101535797119141,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 45.91015625,
+    "length_ratio": 0.7429735785470472,
+    "bp_error_snps": 686.8166666666667
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "hapmlen",
+    "seed": 1,
+    "in_ch": 12,
+    "acc": 0.7123635609944662,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 24.830729166666668,
+    "length_ratio": 0.8251175082780287,
+    "bp_error_snps": 850.3583333333333
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "hapmlen",
+    "seed": 2,
+    "in_ch": 12,
+    "acc": 0.7119572957356771,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 22.081163194444446,
+    "length_ratio": 0.8478889967923688,
+    "bp_error_snps": 736.0333333333333
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "hapmlen",
+    "seed": 3,
+    "in_ch": 12,
+    "acc": 0.7112331390380859,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 31.498263888888886,
+    "length_ratio": 0.8295943245759828,
+    "bp_error_snps": 841.95
+  },
+  {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.008249320183740513,
+    "features": "hapmlen",
+    "seed": 4,
+    "in_ch": 12,
+    "acc": 0.6947491963704427,
+    "reps": 6,
+    "n_ref": 80,
+    "n_tract_ratio": 42.53125,
+    "length_ratio": 0.7731054299011921,
+    "bp_error_snps": 848.225
+  }
+]

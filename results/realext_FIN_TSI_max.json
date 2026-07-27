@@ -1,0 +1,13 @@
+{
+  "pops": [
+    "FIN",
+    "TSI"
+  ],
+  "fst": 0.011978356302137982,
+  "n_sites": 44041,
+  "gen": 30,
+  "rfmix": 0.7933292982675234,
+  "rfmix_flipped": false,
+  "flare": 0.700248064303717,
+  "flare_flipped": false
+}

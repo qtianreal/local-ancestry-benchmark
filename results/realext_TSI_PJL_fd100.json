@@ -1,0 +1,13 @@
+{
+  "pops": [
+    "TSI",
+    "PJL"
+  ],
+  "fst": 0.03002455542723996,
+  "n_sites": 44955,
+  "gen": 30,
+  "rfmix": 0.8901689884328773,
+  "rfmix_flipped": false,
+  "flare": 0.89013666444222,
+  "flare_flipped": false
+}

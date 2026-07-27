@@ -1,0 +1,138 @@
+[
+  {
+    "tag": "attn",
+    "label": "Self-attention layer",
+    "pair": "CHB/CDX",
+    "kind": "architecture",
+    "n": 3,
+    "deltas": [
+      0.011321385701497433,
+      -0.028439203898111942,
+      -7.82012939453125e-05
+    ],
+    "mean": -0.005732006496853274,
+    "positive": 1
+  },
+  {
+    "tag": "ssm",
+    "label": "State-space layer",
+    "pair": "CHB/CDX",
+    "kind": "architecture",
+    "n": 3,
+    "deltas": [
+      0.016147613525390625,
+      0.004912058512369755,
+      -0.004042307535807366
+    ],
+    "mean": 0.005672454833984338,
+    "positive": 2
+  },
+  {
+    "tag": "lda",
+    "label": "Discriminant objective",
+    "pair": "TSI/PJL",
+    "kind": "objective",
+    "n": 5,
+    "deltas": [
+      -0.0060405731201171875,
+      -0.000347137451171875,
+      0.005348841349283817,
+      -0.0015652974446614953,
+      -0.0026194254557291297
+    ],
+    "mean": -0.001044718424479174,
+    "positive": 1
+  },
+  {
+    "tag": "ssl",
+    "label": "Self-supervised pretraining",
+    "pair": "CHB/CDX",
+    "kind": "training",
+    "n": 3,
+    "deltas": [
+      0.004761377970377567,
+      -0.0015411376953125,
+      0.0028934478759765625
+    ],
+    "mean": 0.00203789605034721,
+    "positive": 2
+  },
+  {
+    "tag": "more",
+    "label": "More labelled data",
+    "pair": "CHB/CDX",
+    "kind": "training",
+    "n": 3,
+    "deltas": [
+      -0.011026382446289062,
+      0.0005645751953125,
+      -0.0008220672607421875
+    ],
+    "mean": -0.00376129150390625,
+    "positive": 1
+  },
+  {
+    "tag": "simfreq",
+    "label": "Simulation pretraining, frequency-only",
+    "pair": "CHB/CDX",
+    "kind": "training",
+    "n": 3,
+    "deltas": [
+      0.10091336568196618,
+      0.043519337972005245,
+      0.03960927327473951
+    ],
+    "mean": 0.06134732564290365,
+    "positive": 3
+  },
+  {
+    "tag": "simhaplo",
+    "label": "Simulation pretraining, haplotype-aware",
+    "pair": "CHB/CDX",
+    "kind": "training",
+    "n": 3,
+    "deltas": [
+      -0.011796951293945312,
+      -0.0127105712890625,
+      -0.001251220703125
+    ],
+    "mean": -0.008586247762044271,
+    "positive": 0
+  },
+  {
+    "tag": "cap",
+    "label": "Capacity, 15-fold parameter range",
+    "pair": "CHB/CDX",
+    "kind": "capacity",
+    "n": 2,
+    "unpaired": true,
+    "deltas": [
+      0.003192901611328125,
+      0.0018482208251953125
+    ],
+    "mean": 0.003192901611328125,
+    "positive": 2,
+    "param_lo": 57793,
+    "param_hi": 894721,
+    "caveat": "single run per arm; sweep selects on an evaluated pair"
+  },
+  {
+    "tag": "input",
+    "label": "Haplotype-matching channels",
+    "pair": "8 pairs",
+    "kind": "input",
+    "n": 8,
+    "deltas": [
+      0.016278966267903705,
+      0.09475568135579426,
+      0.01287765502929683,
+      0.006302007039388047,
+      0.016660690307617188,
+      0.007114028930663929,
+      0.06084887186686205,
+      0.03623428344726565
+    ],
+    "mean": 0.03138402303059896,
+    "positive": 8
+  }
+]
