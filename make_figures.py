@@ -66,6 +66,12 @@ def style_axis(ax, fst):
     ax.set_xlim(min(fst) * 0.7, max(fst) * 1.35)
 
 
+def tag(ax, text, x, y, ha="right"):
+    """Corner label saying which kind of data a panel is drawn from."""
+    ax.text(x, y, text, transform=ax.transAxes, ha=ha, va="bottom",
+            fontsize=5.4, color="#8A8A8A", style="italic")
+
+
 def fig0():
     """Overview: what the task is, why divergence is the binding constraint,
     and how per-site accuracy hides the tract failure.
@@ -81,13 +87,13 @@ def fig0():
     if d is None:
         return
 
-    fig = plt.figure(figsize=(7.2, 5.0))
-    gs = fig.add_gridspec(3, 2, height_ratios=[1.05, 1.12, 0.95],
+    fig = plt.figure(figsize=(7.2, 5.5))
+    gs = fig.add_gridspec(3, 2, height_ratios=[1.40, 1.12, 0.95],
                           width_ratios=[1.0, 1.02], hspace=0.62, wspace=0.85)
 
     # ---- A: how an admixed chromosome is built -------------------------
     ax = fig.add_subplot(gs[0, :])
-    ax.set_xlim(0, 100); ax.set_ylim(0.4, 10.3); ax.axis("off")
+    ax.set_xlim(0, 100); ax.set_ylim(0.2, 13.6); ax.axis("off")
     ca, cb = "#0072B2", "#D55E00"
     rng = np.random.default_rng(7)
 
@@ -115,13 +121,31 @@ def fig0():
                                    alpha=0.75, lw=0))
     ax.text(71, 6.0, "Admixed chromosome", ha="center", fontsize=6.6,
             color="#333333")
-    ax.annotate("ancestry switch points are set by the construction,\n"
-                "so every site's label is exact rather than inferred",
-                xy=(71, 4.3), ha="center", va="top", fontsize=6,
-                color="#666666", linespacing=1.35)
+    ax.annotate("switch points are set, not inferred", xy=(71, 4.45),
+                ha="center", va="top", fontsize=6, color="#666666")
     ax.text(6, 6.4, "ticks mark variant sites", fontsize=5.8, color="#888888",
             ha="left", va="top")
-    ax.text(0, 10.2, "A", fontsize=9, fontweight="bold", va="top")
+
+    # Every experiment in the paper scores these six on identical data; the
+    # released tools in particular were not visible anywhere in this figure.
+    ax.text(71, 2.65, "scored on every experiment", ha="center", fontsize=5.8,
+            color="#555555")
+    # Named, not colour-coded. In this panel blue and vermillion already mean
+    # ancestry A and B; reusing the series palette here would give the same two
+    # colours a second meaning inches away from the first. Six further hues
+    # separable from the series palette under deuteranopia do not exist -- the
+    # closest candidates we tested collapse onto "Likelihood + HMM" at dE 5-8
+    # -- so the methods are listed by name and carry their colours in Figs 2,
+    # 4 and 5, where each is actually plotted.
+    meth = ["Window likelihood", "Likelihood + HMM", "RFMix v2",
+            "FLARE", "Dilated CNN", "+ haplotype channels"]
+    for i, lab in enumerate(meth):
+        ax.text(50 + (i % 3) * 15.5, 1.5 - (i // 3) * 1.1, lab,
+                fontsize=5.6, va="center", ha="left", color="#444444")
+
+    ax.text(0, 13.5, "A", fontsize=9, fontweight="bold", va="top")
+    ax.text(4.0, 13.45, "Exact ground truth by construction, used in both tracks",
+            fontsize=7.2, va="top", color="#333333")
 
     # ---- B: the signal that distinguishes the sources ------------------
     ax = fig.add_subplot(gs[1, 0])
@@ -146,7 +170,8 @@ def fig0():
                 xy=(lo_end, 0.085), xytext=(lo_end + 0.045, 0.14),
                 fontsize=5.6, color="#4A7A68", linespacing=1.35,
                 arrowprops=dict(arrowstyle="-", lw=0.5, color="#9ABFB1"))
-    ax.set_title("Diagnostic sites vanish with divergence", fontsize=7.2)
+    ax.set_title("A feasibility floor: the evidence runs out (simulated)",
+                 fontsize=7.2)
 
     # ---- D: what moved accuracy and what did not -----------------------
     ax = fig.add_subplot(gs[1, 1])
@@ -180,8 +205,9 @@ def fig0():
     ax.set_xlabel("Change in per-site accuracy", fontsize=6.4)
     ax.tick_params(labelsize=6)
     ax.spines["left"].set_visible(False)
-    ax.set_title("Input, not architecture, moved accuracy", fontsize=7.2)
-    ax.text(-0.60, 1.24, "D", transform=ax.transAxes, fontsize=9,
+    ax.set_title("Input, not architecture, moved accuracy (real haplotypes)",
+                 fontsize=7.2)
+    ax.text(-0.42, 1.24, "D", transform=ax.transAxes, fontsize=9,
             fontweight="bold", va="top")
 
     # ---- C: accuracy hides the tract failure ---------------------------
@@ -202,10 +228,12 @@ def fig0():
         ntr = 1 + int((np.diff(seq) != 0).sum())
         ax.text(1.012 * n, y + 0.31, f"{ntr} tracts", ha="left", va="center",
                 fontsize=6.4, color="#666666")
-    ax.set_xlim(0, n); ax.set_ylim(-0.45, 2.95)
+    ax.set_xlim(0, n); ax.set_ylim(-0.45, 3.45)
     ax.axis("off")
-    ax.text(0, 2.92, "C", fontsize=9, fontweight="bold", va="bottom",
+    ax.text(0, 3.36, "C", fontsize=9, fontweight="bold", va="bottom",
             transform=ax.transData)
+    ax.text(0.030 * n, 3.36, "Per-site accuracy misses tract structure (simulated)",
+            fontsize=7.2, va="bottom", color="#333333")
     ax.annotate(
         "Per-site accuracy %.3f versus %.3f: the standard metric is nearly\n"
         "blind to the difference between these two tracks, and to the fix."
@@ -472,15 +500,18 @@ def fig4():
                color=COL[k], label=LAB[k], zorder=3, linewidth=0)
     ax.axhline(0.5, color="#888888", lw=0.8, zorder=4)
     ax.set_xticks(xs)
-    ax.set_xticklabels([f"{'/'.join(r['pops'])}\n{r['fst']:.4f}" for r in rows],
-                       fontsize=5.2, linespacing=1.4)
+    # Pair names only: the axis label already says they are ordered by F_ST,
+    # the right-hand panel carries F_ST as its axis, and Table 2 lists the
+    # values. Two stacked lines at a legible size collide at eleven pairs.
+    ax.set_xticklabels(["/".join(r["pops"]) for r in rows], fontsize=6.6,
+                       rotation=45, ha="right", rotation_mode="anchor")
     ax.set_xlim(-0.6, len(rows) - 0.4)
     ax.set_ylim(0.44, 1.02)
     ax.set_xlabel(r"Population pair, ordered by measured $F_{ST}$")
     ax.set_ylabel("Per-site accuracy")
     ax.grid(axis="y", color="#EEEEEE", lw=0.6)
     ax.set_axisbelow(True)
-    ax.legend(fontsize=5.8, frameon=False, ncol=3, loc="upper left",
+    ax.legend(fontsize=7.2, frameon=False, ncol=3, loc="upper left",
               labelspacing=0.3, columnspacing=1.1, handlelength=1.1,
               handletextpad=0.4)
 
@@ -504,7 +535,7 @@ def fig4():
     ax.plot(fst[okh], gap_h[okh], color=COL["cnn_haplo"], lw=0,
             marker=MARK["cnn_haplo"], ms=5, markeredgecolor="white",
             markeredgewidth=0.6, label=LAB["cnn_haplo"], zorder=4)
-    ax.legend(fontsize=5.5, frameon=False, loc="lower right", labelspacing=0.3)
+    ax.legend(fontsize=6.9, frameon=False, loc="lower right", labelspacing=0.3)
     gap = np.concatenate([gap, gap_h])
     lo, hi = np.nanmin(gap), np.nanmax(gap)
     pad = 0.35 * (hi - lo)
@@ -592,7 +623,7 @@ def fig5():
     for tag, g, f in zip(tags, d, fst):
         dx, dy, ha = OFF.get(tag, (0, 8, "center"))
         ax.annotate(tag, xy=(f, g), xytext=(dx, dy), textcoords="offset points",
-                    ha=ha, fontsize=5, color="#555555", zorder=5)
+                    ha=ha, fontsize=6.4, color="#555555", zorder=5)
     ax.set_xscale("log")
     ax.set_xlim(fst.min() * 0.55, fst.max() * 1.9)
     ax.set_ylim(-0.037, 0.093)
@@ -600,9 +631,9 @@ def fig5():
     ax.set_ylabel("Accuracy change from haplotype features")
     ax.grid(axis="y", color="#EEEEEE", lw=0.6)
     ax.set_axisbelow(True)
-    ax.legend(fontsize=6, frameon=False, loc="upper left", labelspacing=0.3,
+    ax.legend(fontsize=7.4, frameon=False, loc="upper left", labelspacing=0.3,
               handletextpad=0.4)
-    ax.annotate("frequency alone suffices", xy=(0.05, -0.033), fontsize=5.5,
+    ax.annotate("frequency alone suffices", xy=(0.05, -0.033), fontsize=6.9,
                 color="#999999", ha="left")
 
     ax = axes[1]
@@ -614,14 +645,14 @@ def fig5():
     for tag, g, f in zip(tags, ratio, fst):
         dx, dy, ha = OFF2.get(tag, (0, 8, "center"))
         ax.annotate(tag, xy=(f, g), xytext=(dx, dy), textcoords="offset points",
-                    ha=ha, fontsize=5, color="#555555", zorder=5)
+                    ha=ha, fontsize=6.4, color="#555555", zorder=5)
     ax.set_xscale("log")
     ax.set_xlim(fst.min() * 0.55, fst.max() * 1.9)
     ax.set_ylim(0.44, 1.30)
     ax.set_xlabel(r"Measured $F_{ST}$")
     ax.set_ylabel("Tract count, haplotype $/$ frequency")
     ax.annotate("fewer spurious tracts", xy=(fst.min() * 0.65, 0.47),
-                fontsize=5.5, color="#999999")
+                fontsize=6.9, color="#999999")
     ax.grid(axis="y", color="#EEEEEE", lw=0.6)
     ax.set_axisbelow(True)
 

@@ -641,6 +641,80 @@ def main():
                          ("rfmix", "RF"), ("flare", "FL")):
                 add(f"{s}{w}", fmt(v[k]) if isinstance(v[k], float) else "n/a")
 
+    # --- demographic factorial ----------------------------------------------
+    # Migration suppresses Fst, so the arms do not span matched divergence and
+    # the raw condition means confound migration with it. Both the restricted
+    # comparison and the regression control are emitted, and the manuscript
+    # quotes the regression.
+    fac = load("factorial_results.json") or []
+    if fac:
+        import numpy as _np
+        from scipy import stats as _sst
+        add("facN", len(fac))
+        add("facSeeds", len({r["seed"] for r in fac}))
+        for c in ("toy", "migration", "geneticmap", "both"):
+            g = _np.array([r["gap"] for r in fac if r["condition"] == c])
+            f = _np.array([r["fst"] for r in fac if r["condition"] == c])
+            tag = {"toy": "Toy", "migration": "Mig", "geneticmap": "Map",
+                   "both": "Both"}[c]
+            add(f"fac{tag}Gap", f"{g.mean():+.3f}")
+            add(f"fac{tag}SD", fmt(g.std(ddof=1)))
+            add(f"fac{tag}FstLo", fmt(f.min(), 4))
+            add(f"fac{tag}FstHi", fmt(f.max(), 4))
+        X = _np.column_stack([_np.ones(len(fac)),
+                              [r["fst"] for r in fac],
+                              [1.0 if r["migration"] > 0 else 0.0 for r in fac],
+                              [1.0 if r["genetic_map"] else 0.0 for r in fac]])
+        y = _np.array([r["gap"] for r in fac])
+        beta, *_ = _np.linalg.lstsq(X, y, rcond=None)
+        resid = y - X @ beta
+        se = _np.sqrt(_np.diag(_np.linalg.inv(X.T @ X) * (resid @ resid)
+                               / (len(y) - X.shape[1])))
+        for i, nm in ((2, "Mig"), (3, "Map")):
+            tt = beta[i] / se[i]
+            pv = 2 * (1 - _sst.t.cdf(abs(tt), len(y) - 4))
+            add(f"fac{nm}Beta", f"{beta[i]:+.3f}")
+            add(f"fac{nm}SE", fmt(se[i]))
+            add(f"fac{nm}P", "<0.001" if pv < 0.001 else f"{pv:.3f}")
+        cut = 0.007
+        m = _np.array([r["gap"] for r in fac if r["fst"] < cut and r["migration"] > 0])
+        n = _np.array([r["gap"] for r in fac if r["fst"] < cut and r["migration"] == 0])
+        tt, pv = _sst.ttest_ind(m, n, equal_var=False)
+        add("facCut", f"{cut:.3f}")
+        add("facLoMig", f"{m.mean():+.3f}")
+        add("facLoNone", f"{n.mean():+.3f}")
+        add("facLoP", "<0.001" if pv < 0.001 else f"{pv:.3f}")
+        add("facLoNMig", len(m)); add("facLoNNone", len(n))
+
+    # --- 95% confidence intervals on the headline paired comparisons ---------
+    # Reviewers read effect sizes off intervals, not standard deviations, and
+    # for the released tools the interval is the honest summary: the direction
+    # is consistent across pairs while the magnitude is barely resolved.
+    def _ci(vals):
+        import numpy as _np
+        from scipy import stats as _st
+        v = _np.asarray(list(vals), float)
+        m = float(v.mean())
+        h = float(_st.sem(v) * _st.t.ppf(0.975, len(v) - 1)) if len(v) > 1 else 0.0
+        return f"[{m - h:+.3f}, {m + h:+.3f}]"
+
+    _mp = load("maxpanel_summary.json") or {}
+    if _mp:
+        add("maxLoCI", _ci(v["haplo"] - v["freq"] for v in _mp.values()
+                           if v["fst"] < 0.04))
+    _ps = load("panelsize_summary.json") or []
+    if _ps:
+        for k, lo, hi in (("Net", "net80", "net100"), ("RF", "rf80", "rf100"),
+                          ("FL", "fl80", "fl100")):
+            add(f"panelCI{k}", _ci(r[hi] - r[lo] for r in _ps))
+        add("panelNPairs", len(_ps))
+        add("panelAllUp", sum(1 for r in _ps if r["net100"] > r["net80"]
+                              and r["rf100"] > r["rf80"] and r["fl100"] > r["fl80"]))
+    _ex = load("external_aggregate.json") or []
+    _pk = [r for r in _ex if r.get("gap_vals")]
+    if _pk:
+        add("extPeakCI", _ci(max(_pk, key=lambda r: r.get("gap", -9))["gap_vals"]))
+
     # --- where the haplotype-aware network wins ------------------------------
     # The manuscript reports the win count; the identity of the winning pair
     # matters because it is the least divergent pair at which any method is

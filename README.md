@@ -32,6 +32,14 @@ by `paper/make_numbers.py`, so the text cannot drift from the data.
    *F*<sub>ST</sub> = 0.0027, is the least divergent one at which any method
    recovers anything; it wins there by 0.044.
 
+**Which simulation shortcut is responsible.** A 36-run factorial crossing
+continuous migration with an empirical recombination map shows that gene flow
+reverses the learned method's simulated advantage (+0.033 under a clean split,
+−0.013 under migration; −0.042 controlling for *F*<sub>ST</sub>, p < 0.001)
+while the empirical map does nothing (+0.004, p = 0.67). Three seeds per cell,
+so this establishes the sign and rough magnitude rather than a precise
+estimate.
+
 Two quantities usually held fixed mattered more than any architectural choice
 tested. Match *contiguity* — the Li–Stephens statistic, as against the
 agreement *rate* neural methods use — helps only where the panel is small
@@ -65,6 +73,8 @@ size rather than adding to it. And no method is near panel saturation:
     run_inputs.py        input-parity experiment on real pairs (panel sizes)
     run_matchlen.py      match contiguity versus agreement rate
     run_sharing.py       haplotype sharing, simulated versus real panels
+    run_control_check.py does the realistic harness reproduce the main sweep?
+    run_factorial.py     migration x recombination-map factorial (36 runs)
 
     interventions that were tried and did not close the deficit:
     run_attn.py          self-attention layer

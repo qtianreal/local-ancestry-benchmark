@@ -3,6 +3,25 @@
 12 cells: {toy, +migration, +empirical genetic map, +both} x 3 split times,
 all five methods, n=1 per cell. Results in `results/realistic_results.json`.
 
+## Superseded
+
+This single-seed factorial is superseded by `run_factorial.py`, whose results
+are in `results/factorial_results.json` and are reported in the manuscript.
+
+The control arm here disagreed with the replicated main sweep by ~17 sigma,
+which is why nothing from this file was used. `run_control_check.py` traced
+that to configuration rather than code: `lai/realistic.py` defaults to 80
+reference haplotypes where `lai/sim.py` uses 100, and this script trained for
+10x12 replicate-epochs where `run_external.py` uses 12x15. With both restored
+the control gives +0.059 +/- 0.026 against the sweep's +0.048 +/- 0.006, a
+separation of 0.7 sigma.
+
+The replicated factorial then found that continuous migration reverses the
+network's simulated advantage (-0.042 controlling for Fst, p<0.001) while an
+empirical recombination map does not (+0.004, p=0.67).
+
+## Original notes, kept for the record
+
 ## Why it is excluded
 
 The control (`toy`) arm does not reproduce the replicated main sweep. At

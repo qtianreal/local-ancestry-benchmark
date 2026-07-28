@@ -62,5 +62,6 @@ paper/*.tex
 paper/*.bib
 paper/*.bst
 paper/BUILD.md
+paper/unwrap.py
 paper/cover_letter.md
 paper/crossref_*.json
