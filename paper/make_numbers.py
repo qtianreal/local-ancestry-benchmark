@@ -334,7 +334,12 @@ def main():
                          sum(1 for r in crf if math.isfinite(r[k]))
         add("crfAccRaw", fmt(mean("raw_acc")))
         add("crfAccVit", fmt(mean("crf_acc")))
-        add("crfAccDelta", fmt(mean("crf_acc") - mean("raw_acc"), 4))
+        # Signed: the change is small but positive, and "changing accuracy by
+        # 0.0002" left readers to guess whether the fix cost anything.
+        _d = mean("crf_acc") - mean("raw_acc")
+        add("crfAccDelta", f"{_d:+.4f}")
+        add("crfAccBetter", sum(1 for r in crf if r["crf_acc"] > r["raw_acc"]))
+        add("crfAccN", len(crf))
         add("crfNRaw", fmt(mean("raw_ntract"), 1))
         add("crfNVit", fmt(mean("crf_ntract"), 2))
         add("crfLenVit", fmt(mean("crf_len"), 2))
@@ -640,6 +645,17 @@ def main():
             for k, s in (("freq", "CNN"), ("haplo", "CNNH"),
                          ("rfmix", "RF"), ("flare", "FL")):
                 add(f"{s}{w}", fmt(v[k]) if isinstance(v[k], float) else "n/a")
+
+    # --- divergence landmarks quoted in the Introduction ---------------------
+    lm = load("landmark_fst.json") or {}
+    for tag, rec in lm.items():
+        if tag.startswith("_"):
+            continue
+        # 5 dp: GBR/CEU is 0.00003 and rounds to zero at four.
+        add(f"lm{tag}", fmt(rec["fst"], 5))
+        add(f"lm{tag}Pair", "/".join(rec["pops"]))
+    if lm:
+        add("lmRatio", str(int(round(lm["EurEas"]["fst"] / lm["HanNS"]["fst"], -1))))
 
     # --- demographic factorial ----------------------------------------------
     # Migration suppresses Fst, so the arms do not span matched divergence and

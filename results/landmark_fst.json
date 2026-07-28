@@ -1,0 +1,68 @@
+{
+  "HanNS": {
+    "pops": [
+      "CHB",
+      "CHS"
+    ],
+    "fst": 0.00041688448123610957,
+    "describes": "north/south Han cline"
+  },
+  "IbsTsi": {
+    "pops": [
+      "IBS",
+      "TSI"
+    ],
+    "fst": 0.0015164994031379119,
+    "describes": "within-Europe, Iberian/Tuscan"
+  },
+  "GbrCeu": {
+    "pops": [
+      "GBR",
+      "CEU"
+    ],
+    "fst": 3.312919419792779e-05,
+    "describes": "within-Europe, British/Utah"
+  },
+  "ChbJpt": {
+    "pops": [
+      "CHB",
+      "JPT"
+    ],
+    "fst": 0.008259917944304088,
+    "describes": "Han/Japanese"
+  },
+  "ChbKhv": {
+    "pops": [
+      "CHB",
+      "KHV"
+    ],
+    "fst": 0.006503575792607582,
+    "describes": "Han/Kinh"
+  },
+  "ChbCdx": {
+    "pops": [
+      "CHB",
+      "CDX"
+    ],
+    "fst": 0.00825533804768755,
+    "describes": "Han/Dai"
+  },
+  "EurEas": {
+    "pops": [
+      "CHB",
+      "CEU"
+    ],
+    "fst": 0.10923640024726679,
+    "describes": "European/East Asian benchmark"
+  },
+  "_meta": {
+    "vcf": "data/chr22.vcf.gz",
+    "region": [
+      "chr22",
+      16000000,
+      51000000
+    ],
+    "n_sites": 127490,
+    "estimator": "Hudson, as in lai/sim.py"
+  }
+}

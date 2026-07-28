@@ -205,7 +205,7 @@ def fig0():
     ax.set_xlabel("Change in per-site accuracy", fontsize=6.4)
     ax.tick_params(labelsize=6)
     ax.spines["left"].set_visible(False)
-    ax.set_title("Input, not architecture, moved accuracy (real haplotypes)",
+    ax.set_title("Only the input change moved accuracy (real haplotypes)",
                  fontsize=7.2)
     ax.text(-0.42, 1.24, "D", transform=ax.transAxes, fontsize=9,
             fontweight="bold", va="top")
@@ -500,11 +500,12 @@ def fig4():
                color=COL[k], label=LAB[k], zorder=3, linewidth=0)
     ax.axhline(0.5, color="#888888", lw=0.8, zorder=4)
     ax.set_xticks(xs)
-    # Pair names only: the axis label already says they are ordered by F_ST,
-    # the right-hand panel carries F_ST as its axis, and Table 2 lists the
-    # values. Two stacked lines at a legible size collide at eleven pairs.
-    ax.set_xticklabels(["/".join(r["pops"]) for r in rows], fontsize=6.6,
-                       rotation=45, ha="right", rotation_mode="anchor")
+    # F_ST is the axis the whole paper is organised around, so each pair
+    # carries its own value rather than only its rank. Rotating lets the
+    # two-part label fit where stacked lines collided at eleven pairs.
+    ax.set_xticklabels([f"{'/'.join(r['pops'])}  {r['fst']:.4f}" for r in rows],
+                       fontsize=6.2, rotation=45, ha="right",
+                       rotation_mode="anchor")
     ax.set_xlim(-0.6, len(rows) - 0.4)
     ax.set_ylim(0.44, 1.02)
     ax.set_xlabel(r"Population pair, ordered by measured $F_{ST}$")

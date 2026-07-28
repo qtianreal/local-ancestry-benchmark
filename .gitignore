@@ -64,4 +64,7 @@ paper/*.bst
 paper/BUILD.md
 paper/unwrap.py
 paper/cover_letter.md
+paper/plain_text.py
+paper/abstract_plain.txt
+paper/cover_letter_plain.txt
 paper/crossref_*.json
