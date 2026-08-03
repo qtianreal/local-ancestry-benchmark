@@ -68,3 +68,11 @@ paper/plain_text.py
 paper/abstract_plain.txt
 paper/cover_letter_plain.txt
 paper/crossref_*.json
+
+# paper/ is a clone of the Overleaf project (its .git lives there, and git
+# ignores nested .git directories automatically). These two are Overleaf's own
+# files: its README, and the copies of the figures it needs in-tree to compile.
+# The versioned figures are figures/*.pdf at the repository root; paper/figures/
+# is a mirror for Overleaf's benefit, so do not track it here as well.
+paper/README.md
+paper/figures/
