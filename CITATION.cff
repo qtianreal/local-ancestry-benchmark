@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this code or the derived results, please cite the preprint below."
+title: "A feasibility threshold for local ancestry inference: code and derived results"
+abstract: >-
+  Code, simulation drivers and derived results for a divergence-resolved
+  benchmark of local ancestry inference, comparing five methods across
+  simulated and real 1000 Genomes haplotypes.
+authors:
+  - family-names: Tian
+    given-names: Qing
+    orcid: "https://orcid.org/0000-0003-1808-2887"
+license: MIT
+repository-code: "https://github.com/qtianreal/local-ancestry-benchmark"
+type: software
+preferred-citation:
+  type: article
+  title: "What limits local ancestry inference at low divergence: a feasibility threshold, a metric that conceals failure, and a deficit of input more than architecture"
+  authors:
+    - family-names: Tian
+      given-names: Qing
+      orcid: "https://orcid.org/0000-0003-1808-2887"
+  journal: "bioRxiv"
+  year: 2026
+  month: 7
+  doi: "10.64898/2026.07.30.741148"
+  url: "https://doi.org/10.64898/2026.07.30.741148"
+  publisher:
+    name: "Cold Spring Harbor Laboratory"
+  notes: "Preprint"

@@ -6,6 +6,9 @@ inference (LAI), comparing five methods across simulated and real haplotypes.
 Every number in the manuscript is generated from the JSON files in `results/`
 by `paper/make_numbers.py`, so the text cannot drift from the data.
 
+Preprint: [bioRxiv 2026.07.30.741148](https://doi.org/10.64898/2026.07.30.741148).
+See [Citation](#citation).
+
 ## Findings
 
 1. **A feasibility floor.** Below Hudson's *F*<sub>ST</sub> ≈ 0.0022 no method
@@ -141,6 +144,32 @@ so results on other accelerators may differ in the last decimal place.
 
 `NOTES_factorial.md` records a demography factorial that is deliberately
 excluded from the manuscript, and why.
+
+## Citation
+
+If you use this code or the derived results, please cite the preprint:
+
+> Tian, Q. (2026). What limits local ancestry inference at low divergence: a
+> feasibility threshold, a metric that conceals failure, and a deficit of input
+> more than architecture. *bioRxiv* 2026.07.30.741148.
+> <https://doi.org/10.64898/2026.07.30.741148>
+
+```bibtex
+@article{Tian2026lai,
+  author  = {Tian, Qing},
+  title   = {What limits local ancestry inference at low divergence: a
+             feasibility threshold, a metric that conceals failure, and a
+             deficit of input more than architecture},
+  journal = {bioRxiv},
+  year    = {2026},
+  doi     = {10.64898/2026.07.30.741148},
+  url     = {https://doi.org/10.64898/2026.07.30.741148},
+  note    = {Preprint}
+}
+```
+
+`CITATION.cff` carries the same entry, so GitHub's *Cite this repository*
+button and the APA/BibTeX exports stay in step with this section.
 
 ## Licence
 
