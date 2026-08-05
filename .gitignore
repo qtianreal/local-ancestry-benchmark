@@ -67,6 +67,8 @@ paper/unwrap.py
 paper/cover_letter.md
 paper/plain_text.py
 paper/make_submission.py
+paper/make_cover_pdf.py
+paper/cover_letter.pdf
 paper/submission/
 paper/abstract_plain.txt
 paper/cover_letter_plain.txt
