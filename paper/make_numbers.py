@@ -800,6 +800,34 @@ def main():
                       ("crf", "ovTractsCrf")):
             add(nm, 1 + int((np.diff(ov[k].astype(np.int16)) != 0).sum()))
 
+    # --- identifiability index: theory-derived feasibility curve -------------
+    ident = load("identifiability.json")
+    if ident:
+        add("idNreal", ident["n_real"])
+        add("idNsim", ident["n_sim"])
+        add("idG", ident["g"])
+        add("idKappa", f'{ident["kappa_real"]:.4f}')
+        add("idKappaSim", f'{ident["kappa_sim"]:.4f}')
+        add("idKappaRatio", f'{ident["kappa_ratio"]:.1f}')
+        add("idLooRMSE", fmt(ident["loo_index"]["rmse"], 3))
+        add("idLooMAE", fmt(ident["loo_index"]["mae"], 3))
+        add("idLooMax", fmt(ident["loo_index"]["max"], 3))
+        add("idLooFstOnly", fmt(ident["loo_fst_only"]["rmse"], 3))
+        # the two differ only in the fourth decimal, which is the point;
+        # quoting them at three would read as "from 0.030 to 0.030"
+        add("idLooRMSEfour", fmt(ident["loo_index"]["rmse"], 4))
+        add("idLooFstOnlyFour", fmt(ident["loo_fst_only"]["rmse"], 4))
+        add("idFoldDensity", f'{ident["fold_density"]:.1f}')
+        add("idFoldFst", f'{ident["fold_fst"]:.0f}')
+        for key, name in (("0.70", "Seventy"), ("0.80", "Eighty"),
+                          ("0.90", "Ninety"), ("0.95", "NinetyFive")):
+            add(f"idFst{name}", fmt(ident["thresholds"][key]["fst"], 4))
+        _floor = next((q for q in ident["pairs"] if q["label"] == "CHB/CHS"), None)
+        if _floor:
+            add("idFloorObs", fmt(_floor["best"], 3))
+            add("idFloorPred", fmt(_floor["pred"], 3))
+        add("idMedianM", f'{ident["median_m"]:,.0f}'.replace(",", r"{,}"))
+
     # --- emit, filling anything the manuscript wants but we lack -------------
     used = set(re.findall(r"\\([A-Za-z]+)\b", TEX.read_text())) if TEX.exists() else set()
     known_latex = set()

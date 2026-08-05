@@ -675,3 +675,90 @@ if __name__ == "__main__":
     print("wrote:", ", ".join(sorted(p.name for p in FIG.glob("*.pdf"))))
     if len(made) != 6:
         sys.exit(f"only {len(made)}/6 figures generated: {made}")
+
+
+def fig6():
+    """The identifiability index: does one constant predict accuracy?
+
+    Left: accuracy against the index, both arms, with each arm's fitted curve.
+    The vertical offset between the two curves is the simulator's flattery,
+    and is the reason the arms are not pooled. Right: leave-one-out predicted
+    against observed on the real pairs, which is the practitioner's case.
+    """
+    d = load("identifiability.json")
+    if d is None:
+        raise FileNotFoundError("results/identifiability.json -- run run_identifiability.py")
+
+    import math
+    phi = lambda z: 0.5 * (1.0 + math.erf(z / math.sqrt(2.0)))
+    real = [p for p in d["pairs"] if p["arm"] == "real"]
+    sim = [p for p in d["pairs"] if p["arm"] == "sim"]
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 3.0))
+
+    ax = axes[0]
+    xs = np.logspace(np.log10(2), np.log10(2500), 400)
+    for pts, k, col, lab, mk in (
+        (sim, d["kappa_sim"], "#8A8A8A", "Simulated", "^"),
+        (real, d["kappa_real"], COL["cnn"], "Real 1000G pairs", "o"),
+    ):
+        ax.plot(xs, [phi(math.sqrt(k * x)) for x in xs], color=col, lw=1.2, zorder=2)
+        ax.scatter([p["x"] for p in pts], [p["best"] for p in pts], s=18, color=col,
+                   marker=mk, label=lab, zorder=3, edgecolor="white", linewidth=0.4)
+    ax.axhline(0.5, color="#BBBBBB", lw=0.7, ls="--", zorder=0)
+    ax.set_xscale("log")
+    ax.set_xlabel(r"identifiability index  $\delta F_{ST}/g$  (sites per tract $\times$ $F_{ST}$)")
+    ax.set_ylabel("best per-site accuracy")
+    ax.set_ylim(0.45, 1.02)
+    ax.grid(axis="y", color="#EEEEEE", lw=0.6, zorder=0)
+    ax.set_axisbelow(True)
+    ax.legend(frameon=False, fontsize=6.5, loc="lower right", bbox_to_anchor=(1.0, 0.02))
+    tag(ax, "simulated + real", 0.98, 0.30)
+
+    ax = axes[1]
+    obs = np.array([p["best"] for p in real])
+    err = np.array(d["loo_index"]["errors"])
+    pred = obs + err
+    ax.plot([0.5, 1.0], [0.5, 1.0], color="#BBBBBB", lw=0.7, ls="--", zorder=1)
+    ax.scatter(obs, pred, s=20, color=COL["cnn"], zorder=3,
+               edgecolor="white", linewidth=0.4)
+    # Several pairs sit on top of each other near 0.72, and the three most
+    # accurate sit against the right edge. Place each label at the first
+    # candidate offset that neither collides with an already-placed label nor
+    # leaves the axes, working in display coordinates so the test is in the
+    # units collisions actually happen in.
+    fig.canvas.draw()
+    CAND = [(5, -6), (5, 5), (-6, -6), (-6, 5), (5, -15), (5, 14), (-6, -15), (-6, 14)]
+    boxes = []
+    x0, x1 = ax.get_xlim()
+    for p, o, pr in sorted(zip(real, obs, pred), key=lambda t: -t[1]):
+        px, py = ax.transData.transform((o, pr))
+        s = fig.dpi / 72.0                          # points -> pixels
+        w, h = 3.1 * len(p["label"]) * s, 7.0 * s   # rough label extent, pixels
+        for dx, dy in CAND:
+            left = px + dx * s if dx > 0 else px + dx * s - w
+            box = (left, py + dy * s - h / 2, left + w, py + dy * s + h / 2)
+            inside = (ax.transData.transform((x0, 0))[0] <= box[0]
+                      and box[2] <= ax.transData.transform((x1, 0))[0])
+            clash = any(box[0] < b[2] and b[0] < box[2] and box[1] < b[3] and b[1] < box[3]
+                        for b in boxes)
+            if inside and not clash:
+                break
+        boxes.append(box)
+        ax.annotate(p["label"], (o, pr), fontsize=5.0, color="#666666",
+                    ha="left" if dx > 0 else "right",
+                    xytext=(dx, dy), textcoords="offset points")
+    ax.set_xlabel("observed accuracy")
+    ax.set_ylabel("predicted, leave-one-out")
+    ax.set_xlim(0.5, 1.02)
+    ax.set_ylim(0.5, 1.02)
+    ax.grid(color="#EEEEEE", lw=0.6, zorder=0)
+    ax.set_axisbelow(True)
+    ax.text(0.04, 0.93, f"RMSE {d['loo_index']['rmse']:.3f}", transform=ax.transAxes,
+            fontsize=6.5, color="#444444")
+    tag(ax, "real pairs only", 0.98, 0.04)
+
+    fig.tight_layout()
+    for e in ("pdf", "png"):
+        fig.savefig(FIG / f"fig6_identifiability.{e}", bbox_inches="tight")
+    plt.close(fig)
