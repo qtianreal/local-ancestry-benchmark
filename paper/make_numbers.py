@@ -828,6 +828,34 @@ def main():
             add("idFloorPred", fmt(_floor["pred"], 3))
         add("idMedianM", f'{ident["median_m"]:,.0f}'.replace(",", r"{,}"))
 
+    # --- does the tract-span term survive a direct test? ---------------------
+    scal = load("index_scaling.json")
+    if scal:
+        by = {}
+        for r in scal:
+            by.setdefault(r["pair"], []).append(r)
+        for rs in by.values():
+            rs.sort(key=lambda r: r["g"])
+        ages = sorted({r["g"] for r in scal})
+        deltas = [rs[-1]["hmm"] - rs[0]["hmm"] for rs in by.values()]
+        g10 = [r["hmm"] for r in scal if r["g"] == ages[0]]
+        add("scalePairs", len(by))
+        add("scaleAgeLo", ages[0])
+        add("scaleAgeHi", ages[-1])
+        # the fold change in x that the age range delivers *within* a pair;
+        # taking it across pairs would fold in the F_ST variation as well
+        add("scaleXfold", round(ages[-1] / ages[0]))
+        # the largest move any pair shows across the whole age range, and the
+        # fact that the moves do not share a sign, are the result
+        add("scaleMaxChange", fmt(max(abs(d) for d in deltas), 3))
+        add("scaleUp", sum(1 for d in deltas if d > 0))
+        add("scaleDown", sum(1 for d in deltas if d < 0))
+        add("scaleFstSpread", fmt(max(g10) - min(g10), 2))
+        # why: the estimator windows over far fewer sites than a tract spans
+        add("scaleTractSites", f'{round(scal[0]["delta"] / ages[-1]):,}'.replace(",", r"{,}"))
+        add("scaleWindowSites", 128)
+        add("scaleTractRatio", round((scal[0]["delta"] / ages[-1]) / 128))
+
     # --- emit, filling anything the manuscript wants but we lack -------------
     used = set(re.findall(r"\\([A-Za-z]+)\b", TEX.read_text())) if TEX.exists() else set()
     known_latex = set()
