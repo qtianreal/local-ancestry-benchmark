@@ -707,7 +707,7 @@ def fig6():
                    marker=mk, label=lab, zorder=3, edgecolor="white", linewidth=0.4)
     ax.axhline(0.5, color="#BBBBBB", lw=0.7, ls="--", zorder=0)
     ax.set_xscale("log")
-    ax.set_xlabel(r"identifiability index  $\delta F_{ST}/g$  (sites per tract $\times$ $F_{ST}$)")
+    ax.set_xlabel(r"identifiability index  $x=\delta F_{ST}/g$  (sites per tract $\times$ $F_{ST}$)")
     ax.set_ylabel("best per-site accuracy")
     ax.set_ylim(0.45, 1.02)
     ax.grid(axis="y", color="#EEEEEE", lw=0.6, zorder=0)
