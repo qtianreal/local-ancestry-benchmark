@@ -758,6 +758,11 @@ def fig6():
             fontsize=6.5, color="#444444")
     tag(ax, "real pairs only", 0.98, 0.04)
 
+    # Same lettering as fig3, since the caption refers to panels A and B.
+    for ax_, letter in zip(axes, "AB"):
+        ax_.text(-0.20, 1.06, letter, transform=ax_.transAxes, fontsize=9,
+                 fontweight="bold", va="bottom", ha="left")
+
     fig.tight_layout()
     for e in ("pdf", "png"):
         fig.savefig(FIG / f"fig6_identifiability.{e}", bbox_inches="tight")
