@@ -880,5 +880,56 @@ def main():
     print(f"wrote {OUT} ({len(defined)} macros)")
 
 
+
+
+def check_supplement_citations():
+    """Verify the main text's Supplemental Fig./Table numbers still exist.
+
+    The two documents compile separately, so the main text cites the supplement
+    with hardcoded strings rather than \\ref -- LaTeX cannot resolve a label
+    across documents without xr. Nothing therefore enforces that the numbers
+    agree, and they have already gone stale once: promoting two tables into the
+    main text renumbered the factorial from S4 to S2, and the citation had to be
+    corrected by hand. This makes that class of error fail loudly instead of
+    shipping.
+
+    Returns the number of problems found.
+    """
+    aux = HERE / "supplementary.aux"
+    if not aux.exists():
+        print("  supplementary.aux absent -- compile the supplement to enable "
+              "the citation check", file=sys.stderr)
+        return 0
+
+    # label name says which kind it is; the aux says which number it prints as
+    exists = {"Fig": set(), "Table": set()}
+    for name, num in re.findall(r"\\newlabel\{(figS\d+|tabS\d+)\}\{\{([^}]*)\}", aux.read_text()):
+        exists["Fig" if name.startswith("fig") else "Table"].add(num)
+
+    text = TEX.read_text()
+    cited = {"Fig": set(), "Table": set()}
+    for kind, num in re.findall(r"Supplemental (Fig|Table)\.?~(S\d+)", text):
+        cited[kind].add(num)
+
+    problems = 0
+    for kind in ("Fig", "Table"):
+        for num in sorted(cited[kind] - exists[kind]):
+            print(f"  CITATION BROKEN: main text cites Supplemental {kind} {num}, "
+                  f"which the supplement does not contain "
+                  f"(it has {sorted(exists[kind]) or 'none'})", file=sys.stderr)
+            problems += 1
+        for num in sorted(exists[kind] - cited[kind]):
+            print(f"  UNCITED: supplement contains {kind} {num}, which the main "
+                  f"text never references", file=sys.stderr)
+            problems += 1
+    if not problems:
+        n = sum(len(v) for v in exists.values())
+        print(f"supplement: {n} items, all cited, all numbers agree")
+    return problems
+
+
 if __name__ == "__main__":
     main()
+    if check_supplement_citations():
+        sys.exit("supplement citations disagree with the supplement -- fix "
+                 "before building the manuscript")
