@@ -143,7 +143,7 @@ def fig0():
         ax.text(50 + (i % 3) * 15.5, 1.5 - (i // 3) * 1.1, lab,
                 fontsize=5.6, va="center", ha="left", color="#444444")
 
-    ax.text(0, 13.5, "A", fontsize=9, fontweight="bold", va="top")
+    ax.text(0, 13.5, "a", fontsize=9, fontweight="bold", va="top")
     ax.text(4.0, 13.45, "Exact ground truth by construction, used in both tracks",
             fontsize=7.2, va="top", color="#333333")
 
@@ -161,7 +161,7 @@ def fig0():
     ax.legend(frameon=False, fontsize=6.2, loc="upper right")
     ax.grid(axis="y", color="#EEEEEE", lw=0.6)
     ax.set_axisbelow(True)
-    ax.text(-0.28, 1.22, "B", transform=ax.transAxes, fontsize=9,
+    ax.text(-0.28, 1.22, "b", transform=ax.transAxes, fontsize=9,
             fontweight="bold", va="top")
     # Last threshold at which any site in the close pair still separates.
     frac = np.array([(d["lo_diag"] > x).mean() for x in ts])
@@ -207,7 +207,7 @@ def fig0():
     ax.spines["left"].set_visible(False)
     ax.set_title("Only the input change moved accuracy (real haplotypes)",
                  fontsize=7.2)
-    ax.text(-0.42, 1.24, "D", transform=ax.transAxes, fontsize=9,
+    ax.text(-0.42, 1.24, "d", transform=ax.transAxes, fontsize=9,
             fontweight="bold", va="top")
 
     # ---- C: accuracy hides the tract failure ---------------------------
@@ -230,7 +230,7 @@ def fig0():
                 fontsize=6.4, color="#666666")
     ax.set_xlim(0, n); ax.set_ylim(-0.45, 3.45)
     ax.axis("off")
-    ax.text(0, 3.36, "C", fontsize=9, fontweight="bold", va="bottom",
+    ax.text(0, 3.36, "c", fontsize=9, fontweight="bold", va="bottom",
             transform=ax.transData)
     ax.text(0.030 * n, 3.36, "Per-site accuracy misses tract structure (simulated)",
             fontsize=7.2, va="bottom", color="#333333")
@@ -439,7 +439,7 @@ def fig3():
         ax.grid(axis="y", color="#EEEEEE", lw=0.6)
         ax.set_axisbelow(True)
 
-    for ax_, letter in zip(axes, "AB"):
+    for ax_, letter in zip(axes, "ab"):
         ax_.text(-0.20, 1.06, letter, transform=ax_.transAxes, fontsize=9,
                  fontweight="bold", va="bottom", ha="left")
 
@@ -663,18 +663,6 @@ def fig5():
     plt.close(fig)
 
 
-if __name__ == "__main__":
-    import sys
-    made = []
-    for name, fn in (("fig0", fig0), ("fig1", fig1), ("fig2", fig2),
-                     ("fig3", fig3), ("fig4", fig4), ("fig5", fig5)):
-        try:
-            fn(); made.append(name)
-        except Exception as exc:                       # noqa: BLE001
-            print(f"FAILED {name}: {type(exc).__name__}: {exc}", file=sys.stderr)
-    print("wrote:", ", ".join(sorted(p.name for p in FIG.glob("*.pdf"))))
-    if len(made) != 6:
-        sys.exit(f"only {len(made)}/6 figures generated: {made}")
 
 
 def fig6():
@@ -758,8 +746,8 @@ def fig6():
             fontsize=6.5, color="#444444")
     tag(ax, "real pairs only", 0.98, 0.04)
 
-    # Same lettering as fig3, since the caption refers to panels A and B.
-    for ax_, letter in zip(axes, "AB"):
+    # Same lettering as fig3, since the caption refers to panels a and b.
+    for ax_, letter in zip(axes, "ab"):
         ax_.text(-0.20, 1.06, letter, transform=ax_.transAxes, fontsize=9,
                  fontweight="bold", va="bottom", ha="left")
 
@@ -767,3 +755,19 @@ def fig6():
     for e in ("pdf", "png"):
         fig.savefig(FIG / f"fig6_identifiability.{e}", bbox_inches="tight")
     plt.close(fig)
+
+# The driver goes last: a figure defined below it is not in scope when it runs,
+# which is how fig6 came to be missing from every command-line rebuild.
+if __name__ == "__main__":
+    import sys
+    FIGURES = (("fig0", fig0), ("fig1", fig1), ("fig2", fig2), ("fig3", fig3),
+               ("fig4", fig4), ("fig5", fig5), ("fig6", fig6))
+    made = []
+    for name, fn in FIGURES:
+        try:
+            fn(); made.append(name)
+        except Exception as exc:                       # noqa: BLE001
+            print(f"FAILED {name}: {type(exc).__name__}: {exc}", file=sys.stderr)
+    print("wrote:", ", ".join(sorted(p.name for p in FIG.glob("*.pdf"))))
+    if len(made) != len(FIGURES):
+        sys.exit(f"only {len(made)}/{len(FIGURES)} figures generated: {made}")
