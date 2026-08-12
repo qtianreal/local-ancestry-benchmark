@@ -856,6 +856,48 @@ def main():
         add("scaleWindowSites", 128)
         add("scaleTractRatio", round((scal[0]["delta"] / ages[-1]) / 128))
 
+    # --- decoding robustness and breakpoint agreement -------------------------
+    dr = load("decode_robustness.json")
+    if dr:
+        # letters only: a TeX control word cannot contain a digit
+        def _m(dec, key, T=None):
+            v = [r[key] for r in dr if r["decoding"] == dec
+                 and (T is None or r["split_time"] == T) and r[key] == r[key]]
+            return sum(v) / len(v)
+
+        def _f1(dec, tol, T=None):
+            p_, r_ = _m(dec, f"prec_{tol}", T), _m(dec, f"rec_{tol}", T)
+            return 2 * p_ * r_ / (p_ + r_) if p_ + r_ else float("nan")
+
+        add("bpTolTight", "0.1")
+        add("bpTolWide", "1")
+        for tag, suf in (("raw", "Raw"), ("viterbi_g30", "Vit")):
+            add(f"bpPrec{suf}", fmt(_m(tag, "prec_1000kb"), 2))
+            add(f"bpRec{suf}", fmt(_m(tag, "rec_1000kb"), 2))
+            # F1 of the mean operating point, so the three reconcile in print
+            add(f"bpFone{suf}", fmt(_f1(tag, "1000kb"), 2))
+            add(f"bpFone{suf}Tight", fmt(_f1(tag, "100kb"), 2))
+        levels = sorted({r["split_time"] for r in dr})
+        # by level, not by Fst: this sweep uses one replicate per level, whose
+        # Fst estimate would not match the range quoted from the main sweep
+        for T, suf in ((levels[0], "Low"), (levels[-1], "High")):
+            add(f"bpFoneVit{suf}", fmt(_f1("viterbi_g30", "1000kb", T), 2))
+        add("bpNlevels", len(levels))
+        add("bpNseeds", len({r["seed"] for r in dr}))
+
+        # the point of the sweep: misspecifying the pulse age barely moves it
+        add("gTrue", 30)
+        add("gLo", 10)
+        add("gHi", 100)
+        by = {}
+        for r in dr:
+            by.setdefault((r["split_time"], r["seed"]), {})[r["decoding"]] = r
+        add("gMisMaxFone", fmt(max(
+            abs(v["viterbi_g30"]["f1_1000kb"] - v[o]["f1_1000kb"])
+            for v in by.values() for o in ("viterbi_g10", "viterbi_g100")), 3))
+        add("gMisTractLo", fmt(min(_m(f"viterbi_g{g}", "n_tract_ratio") for g in (10, 30, 100)), 2))
+        add("gMisTractHi", fmt(max(_m(f"viterbi_g{g}", "n_tract_ratio") for g in (10, 30, 100)), 2))
+
     # --- emit, filling anything the manuscript wants but we lack -------------
     used = set(re.findall(r"\\([A-Za-z]+)\b", TEX.read_text())) if TEX.exists() else set()
     known_latex = set()
