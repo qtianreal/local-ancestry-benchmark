@@ -913,6 +913,29 @@ def main():
         add("gMisTractLo", fmt(min(_m(f"viterbi_g{g}", "n_tract_ratio") for g in (10, 30, 100)), 2))
         add("gMisTractHi", fmt(max(_m(f"viterbi_g{g}", "n_tract_ratio") for g in (10, 30, 100)), 2))
 
+    # --- how precisely the real-data Fst values are known ---------------------
+    fc = load("fst_ci.json") or {}
+    if fc:
+        bench = {k: v for k, v in fc.items()
+                 if not k.startswith(("_", "landmark:"))}
+        lowest = bench["CHB/CHS"]
+        add("fstSEzero", f"{lowest['se']:.5f}")
+        add("fstCIzero", f"{lowest['lo']:.5f} to {lowest['hi']:.5f}")
+        add("fstZzero", fmt(lowest["z"], 1))
+        # every benchmark pair other than the lowest is far from zero
+        rest = [v["z"] for k, v in bench.items() if k != "CHB/CHS"]
+        add("fstZrest", fmt(min(rest), 1))
+        add("fstNrest", len(rest))
+        gc = fc.get("landmark:GBR/CEU")
+        if gc:
+            add("lmGbrCeuSE", f"{gc['se']:.5f}")
+            add("lmGbrCeuZ", fmt(gc["z"], 1))
+        it = fc.get("landmark:IBS/TSI")
+        if it:
+            add("lmIbsTsiZ", fmt(it["z"], 1))
+        add("fstBlockMb", 1)
+        add("fstNblocks", lowest["n_blocks"])
+
     # --- emit, filling anything the manuscript wants but we lack -------------
     used = set(re.findall(r"\\([A-Za-z]+)\b", TEX.read_text())) if TEX.exists() else set()
     known_latex = set()
