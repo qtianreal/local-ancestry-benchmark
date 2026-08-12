@@ -885,6 +885,21 @@ def main():
         add("bpNlevels", len(levels))
         add("bpNseeds", len({r["seed"] for r in dr}))
 
+        # paired within cell, so the divergence gradient cancels and the
+        # interval describes replication rather than the F_ST range
+        import statistics as _st
+        cells = {}
+        for r in dr:
+            cells.setdefault((r["split_time"], r["seed"]), {})[r["decoding"]] = r
+        d = [c["viterbi_g30"]["f1_1000kb"] - c["raw"]["f1_1000kb"] for c in cells.values()]
+        se = _st.stdev(d) / len(d) ** 0.5
+        add("bpDeltaFone", fmt(_st.mean(d), 2))
+        add("bpDeltaFoneCI", f"{fmt(_st.mean(d) - 1.96 * se, 2)} to {fmt(_st.mean(d) + 1.96 * se, 2)}")
+        add("bpDeltaFoneN", len(d))
+        vt = [c["viterbi_g30"]["n_tract_ratio"] for c in cells.values()]
+        add("bpVitTractLo", fmt(min(vt), 2))
+        add("bpVitTractHi", fmt(max(vt), 2))
+
         # the point of the sweep: misspecifying the pulse age barely moves it
         add("gTrue", 30)
         add("gLo", 10)
