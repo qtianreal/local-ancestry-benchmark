@@ -866,7 +866,7 @@ def main():
     # Build-control macros are defined by the build, not by results; defining
     # them here would silently flip \ifdefined guards (e.g. \NOFIGS would
     # strip every figure).
-    CONTROL = {"NOFIGS", "REVIEW"}
+    CONTROL = {"NOFIGS", "REVIEW", "NAT"}  # \NAT@... appears in the natbib patch
     candidates = [n for n in used if n not in defined and n not in CONTROL and re.match(
         r"^(fst|nb|hmm|cnn|gain|chb|transfer|retention|rfmix|flare|excnn|real|haplo|"
         r"oracle|best|N[A-Z])", n)]
@@ -908,7 +908,11 @@ def check_supplement_citations():
 
     text = TEX.read_text()
     cited = {"Fig": set(), "Table": set()}
-    for kind, num in re.findall(r"Supplemental (Fig|Table)\.?~(S\d+)", text):
+    # both the Springer wording (Supplemental Fig.~S1) and the HPGG wording
+    # (Supplementary Figure S1) count as citations
+    for kind, num in re.findall(
+            r"Supplement(?:al|ary) (Fig|Figure|Table)\.?[~ ](S\d+)", text):
+        kind = "Fig" if kind.startswith("Fig") else "Table"
         cited[kind].add(num)
 
     problems = 0
