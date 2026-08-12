@@ -178,13 +178,15 @@ def fig0():
     iv = load("interventions.json") or []
     SHORT = {"attn": "Self-attention", "ssm": "State-space layer",
              "cap": "Capacity, 15$\\times$ params",
-             "lda": "Discriminant loss",
+             "lda": "Discriminant objective",
              "ssl": "Self-sup. pretrain", "more": "More labelled data",
-             "simhaplo": "Simulation pretrain",
+             "simhaplo": "Simulation pretrain (hap.)",
              "input": "Haplotype input"}
-    # The frequency-only pretraining arm is excluded here and reported in the
-    # supplement: it measures a configuration the recommended one supersedes,
-    # and on this axis it would read as an architectural win that it is not.
+    # The frequency-only pretraining arm is excluded here and reported in
+    # Table 4: it measures a configuration the recommended one supersedes, and
+    # on this axis it would read as an architectural win that it is not. The
+    # arm kept here is therefore labelled as the haplotype-aware one, so the
+    # panel and the table cannot be read as describing the same single arm.
     keep = [r for r in iv if r["tag"] in SHORT][::-1]
     for i, r in enumerate(keep):
         is_input = r["kind"] == "input"
