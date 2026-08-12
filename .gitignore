@@ -68,6 +68,10 @@ paper/cover_letter.md
 paper/plain_text.py
 paper/make_submission.py
 paper/make_cover_pdf.py
+paper/make_hpgg.py
+paper/make_hpgg_supp.py
+paper/LOGO.png
+paper_hpgg/
 paper/cover_letter.pdf
 paper/submission/
 paper/abstract_plain.txt
