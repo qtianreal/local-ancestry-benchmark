@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "CHB",
+    "CHS"
+  ],
+  "fst": 0.0004179945227760906,
+  "n_sites": 38191,
+  "gen": 30,
+  "n_ref": 92,
+  "version": "RecombMix V0.8",
+  "recombmix": 0.5124023002801708,
+  "recombmix_flipped": false,
+  "recombmix_coverage": 1.0
+}

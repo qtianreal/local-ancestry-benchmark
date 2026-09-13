@@ -106,3 +106,33 @@ def run(cmd, log_path, timeout=3600):
             return False, "TIMEOUT"
     tail = Path(log_path).read_text()[-1500:]
     return ok, tail
+
+
+def write_hapmap_map(path, positions, chrom):
+    """Constant-rate genetic map in HapMap text format, as Recomb-Mix expects.
+
+    Four tab-delimited fields after a description line: Chromosome,
+    Position(bp), Rate(cM/Mb), Map(cM). Recomb-Mix ignores the Rate column and
+    recomputes it from Position and Map, so only Map has to be right; we write
+    the constant rate anyway so the file is well formed.
+    """
+    cm = np.asarray(positions, dtype=np.float64) * CM_PER_BP
+    rate = CM_PER_BP * 1e6  # cM per Mb
+    with open(path, "w") as fh:
+        fh.write("Chromosome\tPosition(bp)\tRate(cM/Mb)\tMap(cM)\n")
+        for p, c in zip(positions, cm):
+            fh.write(f"{chrom}\t{p}\t{rate:.8f}\t{c:.8f}\n")
+
+
+def write_pop_labels(path, names_a, names_b, pop_a="POPA", pop_b="POPB"):
+    """Reference population labels for Recomb-Mix.
+
+    Same sample-to-population mapping write_sample_map produces for RFMix, but
+    carrying the header line Recomb-Mix's parser expects.
+    """
+    with open(path, "w") as fh:
+        fh.write("#Sample_ID\tPopulation_Label\n")
+        for n in names_a:
+            fh.write(f"{n}\t{pop_a}\n")
+        for n in names_b:
+            fh.write(f"{n}\t{pop_b}\n")

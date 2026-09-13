@@ -1,0 +1,17 @@
+{
+  "pops": [
+    "FIN",
+    "GBR"
+  ],
+  "fst": 0.007445451874166397,
+  "n_sites": 45586,
+  "gen": 30,
+  "n_ref": 80,
+  "version": "RecombMix V0.8",
+  "recombmix": 0.6658163964813759,
+  "recombmix_flipped": false,
+  "recombmix_coverage": 1.0,
+  "rfmix_recheck": 0.6655048287851534,
+  "rfmix_published": 0.6655048287851534,
+  "rfmix_matches": true
+}

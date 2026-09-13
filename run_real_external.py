@@ -46,6 +46,11 @@ def main():
     ap.add_argument("--n-donor", type=int, default=80)
     ap.add_argument("--gen", type=int, default=30)
     ap.add_argument("--fixed-donors", action="store_true")
+    ap.add_argument("--min-mac", type=int, default=1,
+                    help="FLARE minimum minor-allele count; 1 is the published run")
+    ap.add_argument("--seed", type=int, default=4242,
+                    help="reference/donor partition seed; 4242 is the published "
+                         "draw, so the default reproduces it exactly")
     ap.add_argument("--tag", default="",
                     help="suffix for the results file; without it a run at a "
                          "different panel size overwrites the published one")
@@ -57,7 +62,7 @@ def main():
     fst = hudson_fst(haps[pops[0]], haps[pops[1]])
     print(f"{tag}: {positions.size} sites, Fst={fst:.5f}", flush=True)
 
-    rng = np.random.default_rng(4242)
+    rng = np.random.default_rng(args.seed)
     ra, da = split_panel(haps[pops[0]], args.n_ref, args.n_donor, rng,
                          donors_from_end=args.fixed_donors)
     rb, db = split_panel(haps[pops[1]], args.n_ref, args.n_donor, rng,
@@ -102,7 +107,7 @@ def main():
     ok, tail = run([JAVA, "-Xmx8g", "-jar", str(FLARE),
                     f"ref={d / 'ref.vcf.gz'}", f"ref-panel={d / 'samples.tsv'}",
                     f"gt={d / 'query.vcf.gz'}", f"map={d / 'map.plink.tsv'}",
-                    f"out={d / 'flare'}", "min-mac=1", "min-maf=0",
+                    f"out={d / 'flare'}", f"min-mac={args.min_mac}", "min-maf=0",
                     f"gen={args.gen}", "nthreads=4"], d / "flare.log")
     if ok and (d / "flare.anc.vcf.gz").exists():
         c = parse_flare(d / "flare.anc.vcf.gz", n_sites, pos_int, n_hap)
@@ -112,6 +117,7 @@ def main():
     else:
         rec["flare"], rec["flare_err"] = None, tail[-300:]
 
+    rec["min_mac"] = args.min_mac
     (OUT / f"realext_{tag}{args.tag}.json").write_text(json.dumps(rec, indent=2))
     fmt = lambda v: f"{v:.4f}" if isinstance(v, float) else "FAILED"
     print(f"{tag}: Fst={fst:.5f}  RFMix={fmt(rec['rfmix'])}  FLARE={fmt(rec['flare'])}",

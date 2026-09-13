@@ -31,11 +31,14 @@ COL = {
     "flare": "#E69F00",        # orange       - FLARE
     "cnn": "#009E73",          # bluish green - dilated CNN, frequency input
     "cnn_haplo": "#00503A",    # dark green   - same network, + haplotype input
+    "recombmix": "#CC79A7",    # reddish purple - Recomb-Mix
+    "loter": "#767676",        # grey         - Loter
 }
 LAB = {
     "naive_bayes": "Window likelihood", "hmm": "Likelihood + HMM",
     "rfmix": "RFMix v2", "flare": "FLARE", "cnn": "Dilated CNN",
-    "cnn_haplo": "Dilated CNN + haplotype",
+    "cnn_haplo": "Dilated CNN + haplotype", "recombmix": "Recomb-Mix",
+    "loter": "Loter",
 }
 MARK = {"cnn": "o", "cnn_haplo": "s"}
 
@@ -259,7 +262,20 @@ def fig1():
 
     fig, ax = plt.subplots(figsize=(5.4, 3.6))
     fst_all = [r["fst"] for r in agg] + [r["fst"] for r in ext]
-    style_axis(ax, fst_all)
+
+    # Two empirical F_ST landmarks, drawn as dotted verticals as the caption
+    # describes: the north/south Han cline, and the European/East Asian
+    # comparison at which LAI is conventionally benchmarked. The axis is
+    # extended to include them, so that the Han landmark shows as lying left of
+    # every simulated divergence rather than falling off the plot.
+    lm = load("landmark_fst.json") or {}
+    lmx = [(lm[k]["fst"], t) for k, t in (("HanNS", "N/S Han"), ("EurEas", "Eur/EAS"))
+           if k in lm]
+    style_axis(ax, fst_all + [x for x, _ in lmx])
+    for xv, txt in lmx:
+        ax.axvline(xv, color="#555555", lw=0.9, ls=(0, (1, 2)), zorder=1)
+        ax.text(xv, 1.025, txt, fontsize=5.6, color="#555555",
+                ha="center", va="top")
 
     for key, rows in (("naive_bayes", agg), ("hmm", agg), ("cnn", agg),
                       ("rfmix", ext), ("flare", ext)):
@@ -468,6 +484,12 @@ def fig4():
         if e.exists():
             r.update({k: v for k, v in json.loads(e.read_text()).items()
                       if k in ("rfmix", "flare")})
+        rm = OUT / f"recombmix_{tag}.json"
+        if rm.exists():
+            r["recombmix"] = json.loads(rm.read_text()).get("recombmix")
+        lt = OUT / f"loter_{tag}.json"
+        if lt.exists():
+            r["loter"] = json.loads(lt.read_text()).get("loter")
         rows.append(r)
     if not rows:
         return
@@ -479,15 +501,16 @@ def fig4():
     hap = np.array([ip[tuple(r["pops"])]["acc"]["haplo"]
                     if tuple(r["pops"]) in ip else np.nan for r in rows])
 
-    fig, axes = plt.subplots(1, 2, figsize=(7.5, 3.4),
-                             gridspec_kw={"width_ratios": [2.3, 1]})
+    fig, axes = plt.subplots(1, 2, figsize=(8.2, 3.4),
+                             gridspec_kw={"width_ratios": [2.6, 1]})
 
     # Grouped bars, drawn from chance rather than from zero. Chance is the
     # meaningful floor for a two-way call, so anchoring there is a reference
     # baseline rather than a truncated axis, and it lets a below-chance result
     # (CHB/CHS) read as a bar below the line instead of vanishing.
     ax = axes[0]
-    keys = ("naive_bayes", "hmm", "rfmix", "flare", "cnn", "cnn_haplo")
+    keys = ("naive_bayes", "hmm", "rfmix", "flare", "recombmix", "loter", "cnn",
+            "cnn_haplo")
     n = len(keys)
     width = 0.78 / n
     xs = np.arange(len(rows))
@@ -514,17 +537,20 @@ def fig4():
     ax.set_ylabel("Per-site accuracy")
     ax.grid(axis="y", color="#EEEEEE", lw=0.6)
     ax.set_axisbelow(True)
-    ax.legend(fontsize=7.2, frameon=False, ncol=3, loc="upper left",
+    ax.legend(fontsize=7.2, frameon=False, ncol=4, loc="upper left",
               labelspacing=0.3, columnspacing=1.1, handlelength=1.1,
               handletextpad=0.4)
 
     # Right panel: the quantity the argument turns on.
     ax = axes[1]
-    gap = np.array([r["cnn"] - max(r["rfmix"], r["flare"])
-                    if isinstance(r.get("rfmix"), float) else np.nan for r in rows])
-    gap_h = np.array([h - max(r["rfmix"], r["flare"])
-                      if isinstance(r.get("rfmix"), float) and not np.isnan(h)
-                      else np.nan for r, h in zip(rows, hap)])
+    best_rel = [max(v for k, v in r.items()
+                    if k in ("rfmix", "flare", "recombmix", "loter")
+                    and isinstance(v, float))
+                if isinstance(r.get("rfmix"), float) else np.nan for r in rows]
+    gap = np.array([r["cnn"] - b if not np.isnan(b) else np.nan
+                    for r, b in zip(rows, best_rel)])
+    gap_h = np.array([h - b if not (np.isnan(b) or np.isnan(h)) else np.nan
+                      for b, h in zip(best_rel, hap)])
     ok = ~np.isnan(gap)
     ax.axhline(0, color="#888888", lw=0.9, zorder=2)
     # Join each pair's two configurations so the shift is readable per pair.
@@ -756,6 +782,37 @@ def fig6():
     fig.tight_layout()
     for e in ("pdf", "png"):
         fig.savefig(FIG / f"fig6_identifiability.{e}", bbox_inches="tight")
+    plt.close(fig)
+
+
+def figS_bpprf():
+    """Supplementary: breakpoint F1 across all methods vs divergence.
+
+    The cross-method structural comparison Reviewer 2 asked to see, as a
+    localisation view to complement the tract-count ratios of main-text Table 2.
+    F1 is the harmonic mean of breakpoint precision and recall at a 1 cM
+    tolerance (both are in results/bp_prf.json). The released-tool runs here are
+    fresh, independent draws from the same seeded simulation.
+    """
+    rows = json.loads((OUT / "bp_prf.json").read_text())
+    rows.sort(key=lambda r: r["fst"])
+    fst = np.array([r["fst"] for r in rows])
+    fig, ax = plt.subplots(figsize=(5.2, 3.6))
+    for k in ("naive_bayes", "hmm", "rfmix", "flare", "cnn", "cnn_haplo"):
+        y = np.array([r[k]["f1_1000kb"] if k in r else np.nan for r in rows])
+        ax.plot(fst, y, marker=MARK.get(k, "o"), ms=4, lw=1.3,
+                color=COL[k], label=LAB[k])
+    ax.set_xscale("log")
+    ax.set_xlabel(r"Source divergence, Hudson's $F_{ST}$")
+    ax.set_ylabel("Breakpoint F1 (1 cM tolerance)")
+    ax.set_ylim(-0.02, 1.02)
+    ax.grid(color="#EEEEEE", lw=0.6)
+    ax.set_axisbelow(True)
+    ax.legend(fontsize=7, frameon=False, ncol=2, loc="upper left",
+              labelspacing=0.3, columnspacing=1.1, handlelength=1.4)
+    fig.tight_layout()
+    for e in ("pdf", "png"):
+        fig.savefig(FIG / f"figS_bpprf.{e}", bbox_inches="tight")
     plt.close(fig)
 
 # The driver goes last: a figure defined below it is not in scope when it runs,

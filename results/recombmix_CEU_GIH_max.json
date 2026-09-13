@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "CEU",
+    "GIH"
+  ],
+  "fst": 0.03688582569562222,
+  "n_sites": 45360,
+  "gen": 30,
+  "n_ref": 92,
+  "version": "RecombMix V0.8",
+  "recombmix": 0.8842482363315697,
+  "recombmix_flipped": false,
+  "recombmix_coverage": 1.0
+}

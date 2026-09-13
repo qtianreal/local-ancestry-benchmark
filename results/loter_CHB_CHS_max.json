@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "CHB",
+    "CHS"
+  ],
+  "fst": 0.0004179945227760906,
+  "n_sites": 38191,
+  "gen": 30,
+  "n_ref": 92,
+  "version": "loter 1.0.1",
+  "loter": 0.5244576601817182,
+  "loter_flipped": false,
+  "loter_coverage": 1.0
+}

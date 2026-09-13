@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "TSI",
+    "PJL"
+  ],
+  "fst": 0.03002455542723996,
+  "n_sites": 44955,
+  "gen": 30,
+  "n_ref": 80,
+  "version": "RecombMix V0.8",
+  "recombmix": 0.8009937020353687,
+  "recombmix_flipped": false,
+  "recombmix_coverage": 1.0
+}

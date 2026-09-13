@@ -1,0 +1,17 @@
+{
+  "pops": [
+    "CEU",
+    "TSI"
+  ],
+  "fst": 0.002688194882273261,
+  "n_sites": 43151,
+  "gen": 30,
+  "n_ref": 92,
+  "version": "RecombMix V0.8",
+  "recombmix": 0.5663980122129267,
+  "recombmix_flipped": false,
+  "recombmix_coverage": 1.0,
+  "rfmix_recheck": 0.5668647597969919,
+  "rfmix_published": 0.5668647597969919,
+  "rfmix_matches": true
+}

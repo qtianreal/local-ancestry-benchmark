@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "CHB",
+    "CDX"
+  ],
+  "fst": 0.008249320183740513,
+  "n_sites": 40312,
+  "gen": 30,
+  "n_ref": 100,
+  "version": "RecombMix V0.8",
+  "recombmix": 0.7104611375024806,
+  "recombmix_flipped": false,
+  "recombmix_coverage": 1.0
+}

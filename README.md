@@ -66,6 +66,7 @@ size rather than adding to it. And no method is near panel saturation:
     run_external.py      RFMix and FLARE on simulated data
     run_real.py          real 1000 Genomes pairs
     run_real_external.py RFMix and FLARE on real pairs
+    run_real_recombmix.py Recomb-Mix on real pairs (re-verifies RFMix)
     run_tracts.py        tract-level structure
     run_dating.py        implied admixture times
     run_crf.py           Viterbi decoding of the trained logits
@@ -120,6 +121,16 @@ External tools, not vendored here:
   links cleanly.
 - **FLARE 0.6.0** — <https://faculty.washington.edu/browning/flare.jar>, needs a
   JDK.
+- **Recomb-Mix V0.8** — <https://github.com/ucfcbb/Recomb-Mix>. Do not clone it:
+  the repository is 12 GB because it ships recombination maps for every
+  chromosome, and we supply our own constant-rate map. Fetch `src/RecombMix.cpp`
+  alone. Their Makefile assumes GCC; on macOS build against Homebrew Boost and
+  libomp with
+
+      clang++ -std=c++17 -Os -Xpreprocessor -fopenmp \
+        -I/opt/homebrew/include -I/opt/homebrew/opt/libomp/include \
+        -L/opt/homebrew/lib -L/opt/homebrew/opt/libomp/lib \
+        src/RecombMix.cpp -lboost_iostreams -lomp -o RecombMix
 
 Real data (425 MB, not versioned):
 

@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "CHB",
+    "CEU"
+  ],
+  "fst": 0.10912152918182699,
+  "n_sites": 44097,
+  "gen": 30,
+  "n_ref": 80,
+  "version": "loter 1.0.1",
+  "loter": 0.916213121073996,
+  "loter_flipped": false,
+  "loter_coverage": 1.0
+}

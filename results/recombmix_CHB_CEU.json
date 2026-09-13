@@ -1,0 +1,17 @@
+{
+  "pops": [
+    "CHB",
+    "CEU"
+  ],
+  "fst": 0.10912152918182699,
+  "n_sites": 44097,
+  "gen": 30,
+  "n_ref": 80,
+  "version": "RecombMix V0.8",
+  "recombmix": 0.9757512557543597,
+  "recombmix_flipped": false,
+  "recombmix_coverage": 1.0,
+  "rfmix_recheck": 0.9767022841689911,
+  "rfmix_published": 0.9767022841689911,
+  "rfmix_matches": true
+}

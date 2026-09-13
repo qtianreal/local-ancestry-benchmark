@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "CHB",
+    "JPT"
+  ],
+  "fst": 0.00831116613454643,
+  "n_sites": 38449,
+  "gen": 30,
+  "n_ref": 92,
+  "version": "RecombMix V0.8",
+  "recombmix": 0.713642991365185,
+  "recombmix_flipped": false,
+  "recombmix_coverage": 1.0
+}

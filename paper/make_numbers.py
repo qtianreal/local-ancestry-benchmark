@@ -110,6 +110,13 @@ def main():
         add("retentionMinSD", fmt(pr[k].get("retention_sd", 0.0)))
         add("retentionHiSD", fmt(pr[-1].get("retention_sd", 0.0)))
         add("retentionHi", fmt(pr[-1]["retention"]))
+        # Lowest divergence whose above-chance accuracy clears 0.20, i.e. the
+        # lowest interpretable point; its retention sits above the minimum,
+        # so long-range reliance peaks at intermediate divergence, not the floor.
+        interp = [r for r in pr if r["full_acc"] - 0.5 >= 0.20]
+        if interp:
+            add("retentionLowInterp", fmt(interp[0]["retention"]))
+            add("retentionLowInterpFst", fmt(interp[0]["fst"], 4))
 
     # --- external tools -----------------------------------------------------
     ex = load("external_aggregate.json") or load("external_results.json")
@@ -199,19 +206,30 @@ def main():
         if ep.exists():
             r.update({k: v for k, v in json.loads(ep.read_text()).items()
                       if k in ("rfmix", "flare")})
+        rp = RES / f"recombmix_{tag}.json"
+        if rp.exists():
+            r["recombmix"] = json.loads(rp.read_text()).get("recombmix")
+        lp = RES / f"loter_{tag}.json"
+        if lp.exists():
+            r["loter"] = json.loads(lp.read_text()).get("loter")
         reals.append(r)
     reals.sort(key=lambda r: r["fst"])
     if reals:
         add("NRealPairs", len(reals))
         add("realFstMin", fmt(reals[0]["fst"], 5))
         add("realFstMax", fmt(reals[-1]["fst"], 5))
-        keys = ("naive_bayes", "hmm", "rfmix", "flare", "cnn")
+        keys = ("naive_bayes", "hmm", "rfmix", "flare", "recombmix", "loter", "cnn")
         short = {"naive_bayes": "NB", "hmm": "HMM", "rfmix": "RF",
-                 "flare": "FL", "cnn": "CNN"}
+                 "flare": "FL", "recombmix": "RM", "loter": "LOT", "cnn": "CNN"}
+        _ci = load("fst_ci.json") or {}
         for i, r in enumerate(reals[: len(WORDS)]):
             tag = f"R{WORDS[i]}"
             add(f"pair{tag}", "/".join(r["pops"]))
             add(f"fst{tag}", fmt(r["fst"], 5))
+            _c = _ci.get("/".join(r["pops"]))
+            if _c:
+                add(f"fstSE{tag}", f"{_c['se']:.5f}")
+                add(f"fstZ{tag}", fmt(_c["z"], 1))
             for k in keys:
                 v = r.get(k)
                 add(f"{short[k]}{tag}", fmt(v) if isinstance(v, float) else "n/a")
@@ -229,13 +247,15 @@ def main():
         beaten = sum(
             1 for r in reals
             if isinstance(r.get("cnn"), float) and max(
-                [v for v in (r.get("rfmix"), r.get("flare")) if isinstance(v, float)] or [-1]
+                [v for v in (r.get("rfmix"), r.get("flare"), r.get("recombmix"), r.get("loter"))
+                 if isinstance(v, float)] or [-1]
             ) > r["cnn"])
         add("realCNNBeaten", beaten)
         add("realCNNTotal", len(reals))
         # Largest real-data deficit of the network against the best tool.
         worst = max(
-            (max([v for v in (r.get("rfmix"), r.get("flare")) if isinstance(v, float)] or [0])
+            (max([v for v in (r.get("rfmix"), r.get("flare"), r.get("recombmix"), r.get("loter"))
+                  if isinstance(v, float)] or [0])
              - r["cnn"], "/".join(r["pops"]))
             for r in reals if isinstance(r.get("cnn"), float))
         add("realWorstDeficit", fmt(worst[0]))
@@ -244,7 +264,8 @@ def main():
         # Spread of the deficit, and whether divergence explains it.
         gaps, fsts = [], []
         for r in reals:
-            ext = [v for v in (r.get("rfmix"), r.get("flare")) if isinstance(v, float)]
+            ext = [v for v in (r.get("rfmix"), r.get("flare"), r.get("recombmix"), r.get("loter"))
+                   if isinstance(v, float)]
             if ext and isinstance(r.get("cnn"), float):
                 gaps.append(r["cnn"] - max(ext)); fsts.append(r["fst"])
         if gaps:
@@ -555,7 +576,7 @@ def main():
 
     # --- panel size: does anyone gain differentially? -------------------------
     import numpy as _np
-    pg = {"haplo": [], "rfmix": [], "flare": []}
+    pg = {"haplo": [], "rfmix": [], "flare": [], "recombmix": [], "loter": []}
     for tag in ("FIN_GBR", "CHB_CDX", "CHB_JPT", "TSI_PJL"):
         try:
             lo = json.loads((RES / f"tuning/inputs_{tag}_fd80.json").read_text())
@@ -568,10 +589,76 @@ def main():
         pg["haplo"].append(g(hi, "haplo") - g(lo, "haplo"))
         pg["rfmix"].append(eh["rfmix"] - el["rfmix"])
         pg["flare"].append(eh["flare"] - el["flare"])
+        try:
+            rl = json.loads((RES / f"recombmix_{tag}_fd80.json").read_text())
+            rh = json.loads((RES / f"recombmix_{tag}_fd100.json").read_text())
+            pg["recombmix"].append(rh["recombmix"] - rl["recombmix"])
+        except FileNotFoundError:
+            pass
+        try:
+            ll = json.loads((RES / f"loter_{tag}_fd80.json").read_text())
+            lh = json.loads((RES / f"loter_{tag}_fd100.json").read_text())
+            pg["loter"].append(lh["loter"] - ll["loter"])
+        except FileNotFoundError:
+            pass
     if pg["haplo"]:
         add("panelN", len(pg["haplo"]))
-        for k, s in (("haplo", "Net"), ("rfmix", "RF"), ("flare", "FL")):
-            add(f"panelGain{s}", f"{_np.mean(pg[k]):+.3f}")
+        for k, s in (("haplo", "Net"), ("rfmix", "RF"), ("flare", "FL"),
+                     ("recombmix", "RM"), ("loter", "LOT")):
+            if pg[k]:
+                add(f"panelGain{s}", f"{_np.mean(pg[k]):+.3f}")
+
+    # --- panel-size table, every cell generated -------------------------------
+    # These were hard-coded literals in the manuscript until Recomb-Mix was
+    # added; they are emitted here so the table derives from results like every
+    # other number. Verified identical to the published literals when added.
+    PSPAIRS = ("FIN_GBR", "CHB_CDX", "CHB_JPT", "TSI_PJL")
+    ps_up = {"net": 0, "rfmix": 0, "flare": 0, "recombmix": 0, "loter": 0}
+    ps_n = 0
+    for i, tag in enumerate(PSPAIRS):
+        w = WORDS[i]
+        try:
+            net = {}
+            for sz in (40, 80, 100):
+                rows = json.loads((RES / f"tuning/inputs_{tag}_fd{sz}.json").read_text())
+                net[sz] = float(_np.mean([q["acc"] for q in rows
+                                          if q["features"] == "haplo"]))
+            ext = {sz: json.loads((RES / f"realext_{tag}_fd{sz}.json").read_text())
+                   for sz in (80, 100)}
+            rm = {sz: json.loads((RES / f"recombmix_{tag}_fd{sz}.json").read_text())
+                  ["recombmix"] for sz in (80, 100)}
+            lot = {sz: json.loads((RES / f"loter_{tag}_fd{sz}.json").read_text())
+                   ["loter"] for sz in (80, 100)}
+        except (FileNotFoundError, KeyError):
+            continue
+        add(f"psPair{w}", tag.replace("_", "/"))
+        add(f"psFst{w}", fmt(ext[80]["fst"], 4))
+        add(f"psNetForty{w}", fmt(net[40]))
+        add(f"psNetEighty{w}", fmt(net[80]))
+        add(f"psNetHundred{w}", fmt(net[100]))
+        add(f"psRFEighty{w}", fmt(ext[80]["rfmix"]))
+        add(f"psRFHundred{w}", fmt(ext[100]["rfmix"]))
+        add(f"psFLEighty{w}", fmt(ext[80]["flare"]))
+        add(f"psFLHundred{w}", fmt(ext[100]["flare"]))
+        add(f"psRMEighty{w}", fmt(rm[80]))
+        add(f"psRMHundred{w}", fmt(rm[100]))
+        add(f"psLOTEighty{w}", fmt(lot[80]))
+        add(f"psLOTHundred{w}", fmt(lot[100]))
+        ps_n += 1
+        ps_up["net"] += net[100] > net[80]
+        ps_up["rfmix"] += ext[100]["rfmix"] > ext[80]["rfmix"]
+        ps_up["flare"] += ext[100]["flare"] > ext[80]["flare"]
+        ps_up["recombmix"] += rm[100] > rm[80]
+        ps_up["loter"] += lot[100] > lot[80]
+    if ps_n:
+        add("psPairsN", ps_n)
+        # \panelAllUp says every method improves in every pair. That holds for
+        # the three methods the table carried before Recomb-Mix; Recomb-Mix
+        # falls at one pair, so any sentence asserting "every method" must now
+        # be qualified. These counts are what such a sentence should cite.
+        for k, sh in (("net", "Net"), ("rfmix", "RF"), ("flare", "FL"),
+                      ("recombmix", "RM"), ("loter", "LOT")):
+            add(f"psUp{sh}", ps_up[k])
 
     # --- contiguity against panel size ---------------------------------------
     ml = {}
@@ -608,9 +695,13 @@ def main():
         tag = "_".join(r[0]["pops"])
         e = RES / f"realext_{tag}_max.json"
         ext = json.loads(e.read_text()) if e.exists() else {}
+        rm = RES / f"recombmix_{tag}_max.json"
+        rmv = json.loads(rm.read_text()).get("recombmix") if rm.exists() else None
+        lm = RES / f"loter_{tag}_max.json"
+        lmv = json.loads(lm.read_text()).get("loter") if lm.exists() else None
         mx.append({"fst": r[0]["fst"], "pops": r[0]["pops"], "freq": g("freq"),
                    "haplo": g("haplo"), "rfmix": ext.get("rfmix"),
-                   "flare": ext.get("flare")})
+                   "flare": ext.get("flare"), "recombmix": rmv, "loter": lmv})
     if mx:
         from scipy import stats as _stats
         add("maxNref", 92)
@@ -621,10 +712,18 @@ def main():
         add("maxLoGain", f"{_np.mean(d):+.3f}")
         add("maxLoPos", sum(1 for x in d if x > 0))
         add("maxLoP", f"{_stats.ttest_1samp(d, 0)[1]:.3f}")
+        _rel = lambda m: max(v for k, v in m.items()
+                             if k in ("rfmix", "flare", "recombmix", "loter")
+                             and isinstance(v, float))
         beat = sum(1 for m in mx if m["rfmix"] is not None
-                   and m["haplo"] > max(m["rfmix"], m["flare"]))
+                   and m["haplo"] > _rel(m))
         beatf = sum(1 for m in mx if m["rfmix"] is not None
-                    and m["freq"] > max(m["rfmix"], m["flare"]))
+                    and m["freq"] > _rel(m))
+        _win = [m for m in mx if m["rfmix"] is not None and m["haplo"] > _rel(m)]
+        if _win:
+            _w = max(_win, key=lambda m: m["haplo"] - _rel(m))
+            add("maxWinRM", fmt(_w["recombmix"]) if isinstance(_w["recombmix"], float)
+                else "n/a")
         add("maxBeats", beat)
         # Guard against the wording trap: several passages say "trails", which
         # is the complement of this count, not the count itself.
@@ -645,6 +744,12 @@ def main():
             for k, s in (("freq", "CNN"), ("haplo", "CNNH"),
                          ("rfmix", "RF"), ("flare", "FL")):
                 add(f"{s}{w}", fmt(v[k]) if isinstance(v[k], float) else "n/a")
+            _rmm = RES / f"recombmix_{tag}_max.json"
+            _rv = json.loads(_rmm.read_text()).get("recombmix") if _rmm.exists() else None
+            add(f"RM{w}", fmt(_rv) if isinstance(_rv, float) else "n/a")
+            _lmm = RES / f"loter_{tag}_max.json"
+            _lv = json.loads(_lmm.read_text()).get("loter") if _lmm.exists() else None
+            add(f"LOT{w}", fmt(_lv) if isinstance(_lv, float) else "n/a")
 
     # --- divergence landmarks quoted in the Introduction ---------------------
     lm = load("landmark_fst.json") or {}
@@ -935,6 +1040,142 @@ def main():
             add("lmIbsTsiZ", fmt(it["z"], 1))
         add("fstBlockMb", 1)
         add("fstNblocks", lowest["n_blocks"])
+
+    # --- Recomb-Mix: how a third released tool behaves across the range -------
+    # Run by run_real_recombmix.py, which reproduces run_real_external.py's
+    # construction and re-runs RFMix to prove it. Single runs per pair, as the
+    # other released tools are, so no interval here.
+    rmrows = []
+    for f in sorted(RES.glob("recombmix_*.json")):
+        # Only the bare two-population runs at the published 80-haplotype panel.
+        # Excludes _max, _fd* and the held-back _s* partition-replication files,
+        # which must not leak into the manuscript's Recomb-Mix summary.
+        if not re.fullmatch(r"recombmix_[A-Z]+_[A-Z]+\.json", f.name):
+            continue
+        d = json.loads(f.read_text())
+        tag = "_".join(d["pops"])
+        ep = RES / f"realext_{tag}.json"
+        if not ep.exists() or not isinstance(d.get("recombmix"), float):
+            continue
+        e = json.loads(ep.read_text())
+        rmrows.append({"pops": d["pops"], "fst": d["fst"], "rm": d["recombmix"],
+                       "other": max(e["rfmix"], e["flare"])})
+    rmrows.sort(key=lambda r: r["fst"])
+    if rmrows:
+        add("rmVersion", "V0.8")
+        add("rmPairs", len(rmrows))
+        add("rmFloorPair", "/".join(rmrows[0]["pops"]))
+        add("rmFloor", fmt(rmrows[0]["rm"]))
+        # Below the divergence at which haplotype information stops paying,
+        # Recomb-Mix is level with the better of RFMix and FLARE; above it it
+        # is consistently behind.
+        lo = [r for r in rmrows if r["fst"] < 0.012]
+        hi = [r for r in rmrows if r["fst"] > 0.03]
+        if lo:
+            add("rmLoN", len(lo))
+            add("rmLoLeads", sum(1 for r in lo if r["rm"] > r["other"]))
+            add("rmLoDelta", f"{_np.mean([r['rm'] - r['other'] for r in lo]):+.3f}")
+        if hi:
+            add("rmHiN", len(hi))
+            add("rmHiLeads", sum(1 for r in hi if r["rm"] > r["other"]))
+            add("rmHiDelta", f"{_np.mean([r['rm'] - r['other'] for r in hi]):+.3f}")
+            w = min(hi, key=lambda r: r["rm"] - r["other"])
+            add("rmHiWorst", f"{w['rm'] - w['other']:+.3f}")
+            add("rmHiWorstPair", "/".join(w["pops"]))
+        # The ordering among released tools at low divergence is not stable
+        # across donor draws, which bounds what a single run per pair can say.
+        try:
+            a = json.loads((RES / "recombmix_FIN_GBR.json").read_text())["recombmix"]
+            ae = json.loads((RES / "realext_FIN_GBR.json").read_text())
+            b = json.loads((RES / "recombmix_FIN_GBR_fd80.json").read_text())["recombmix"]
+            be = json.loads((RES / "realext_FIN_GBR_fd80.json").read_text())
+            add("rmFlipPair", "FIN/GBR")
+            add("rmFlipRandRM", fmt(a))
+            add("rmFlipRandOther", fmt(max(ae["rfmix"], ae["flare"])))
+            add("rmFlipFixedRM", fmt(b))
+            add("rmFlipFixedOther", fmt(max(be["rfmix"], be["flare"])))
+        except (FileNotFoundError, KeyError):
+            pass
+        # RFMix reproduced exactly when re-run inside the Recomb-Mix harness,
+        # which is what establishes that the tools saw identical data.
+        checks = []
+        for f in sorted(RES.glob("recombmix_*.json")):
+            d = json.loads(f.read_text())
+            if d.get("rfmix_matches"):
+                checks.append(d["rfmix_recheck"])
+        if checks:
+            add("rmVerifyN", len(checks))
+
+    # --- replication over reference/donor partitions --------------------------
+    # Every released-tool number elsewhere is a single partition. These four
+    # low-divergence pairs were repeated over five, which bounds what one run
+    # can establish about the ordering between methods.
+    dw = load("draws_summary.json")
+    if dw:
+        add("drawsParts", dw["n_partitions"])
+        add("drawsPairs", dw["n_pairs"])
+        add("drawsSpreadMean", fmt(dw["spread_within_method_mean"], 3))
+        add("drawsSpreadMax", fmt(dw["spread_within_method_max"], 3))
+        add("drawsGapMean", fmt(dw["gap_between_methods_mean"], 3))
+        add("drawsChanges", dw["n_pairs_winner_changes"])
+        _ratio = (dw["spread_within_method_mean"] / dw["gap_between_methods_mean"]
+                  if dw["gap_between_methods_mean"] else float("nan"))
+        add("drawsRatio", fmt(_ratio, 1))
+        _sh = {"rfmix": "RF", "flare": "FL", "recombmix": "RM"}
+        for i, r in enumerate(dw["pairs"][: len(WORDS)]):
+            w = f"D{WORDS[i]}"
+            add(f"pair{w}", r["pair"])
+            for m, tagm in _sh.items():
+                d = r["methods"].get(m)
+                if d:
+                    add(f"{tagm}{w}Mean", fmt(d["mean"]))
+                    add(f"{tagm}{w}Lo", fmt(d["min"]))
+                    add(f"{tagm}{w}Hi", fmt(d["max"]))
+        # On the published partition Recomb-Mix led every one of these pairs;
+        # across the other four RFMix led most often. The single draw the study
+        # reports is therefore unrepresentative of the ordering.
+        _pub = [r["winners"][0] for r in dw["pairs"] if r["winners"]]
+        _rest = [x for r in dw["pairs"] for x in r["winners"][1:]]
+        add("drawsPubRM", sum(1 for x in _pub if x == "recombmix"))
+        add("drawsPubN", len(_pub))
+        add("drawsRestRF", sum(1 for x in _rest if x == "rfmix"))
+        add("drawsRestN", len(_rest))
+
+    # --- provenance: unrelated-sample panel size -----------------------------
+    # data/kg.panel is the 1000 Genomes unrelated subset (one header line).
+    _panel = HERE.parent / "data/kg.panel"
+    if _panel.exists():
+        add("panelUnrelated", sum(1 for _ in _panel.open()) - 1)
+
+    # --- FLARE min-mac sensitivity (Reviewer 4) ------------------------------
+    # FLARE's own filter (min-mac 50) can help or hurt at our sample size with
+    # no consistent sign; the floor is unmoved and the CEU/TSI win survives
+    # giving FLARE its most favourable threshold.
+    def _flare(tag):
+        f = RES / f"realext_{tag}.json"
+        return json.loads(f.read_text())["flare"] if f.exists() else None
+    _macs = ("", "_mac10", "_mac20", "_mac50")
+    # Floor pair: FLARE stays near chance across min-mac.
+    _floor = [_flare("CHB_CHS" + m) for m in _macs]
+    _floor = [x for x in _floor if isinstance(x, float)]
+    if _floor:
+        add("macFloorFlareLo", fmt(min(_floor)))
+        add("macFloorFlareHi", fmt(max(_floor)))
+    # No consistent direction: helped most at CEU/TSI, hurt most at CHB/CDX.
+    for tag, sh, pick in (("CEU_TSI", "Help", max), ("CHB_CDX", "Hurt", min)):
+        base = _flare(tag)
+        alt = [_flare(tag + m) for m in ("_mac10", "_mac20", "_mac50")]
+        alt = [x for x in alt if isinstance(x, float)]
+        if isinstance(base, float) and alt:
+            chosen = pick(alt, key=lambda x: x - base)
+            add(f"mac{sh}Pair", tag.replace("_", "/"))
+            add(f"mac{sh}Delta", f"{chosen - base:+.3f}")
+    # CEU/TSI win survives FLARE's best min-mac at the enlarged panel.
+    _cw = [_flare("CEU_TSI_max"), _flare("CEU_TSI_max_mac20"),
+           _flare("CEU_TSI_max_mac50")]
+    _cw = [x for x in _cw if isinstance(x, float)]
+    if _cw:
+        add("macMaxWinFlareBest", fmt(max(_cw)))
 
     # --- emit, filling anything the manuscript wants but we lack -------------
     used = set(re.findall(r"\\([A-Za-z]+)\b", TEX.read_text())) if TEX.exists() else set()

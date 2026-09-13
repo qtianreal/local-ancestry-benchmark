@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "CHB",
+    "CDX"
+  ],
+  "fst": 0.008249320183740513,
+  "n_sites": 40312,
+  "gen": 30,
+  "rfmix": 0.7341377877555071,
+  "rfmix_flipped": false,
+  "flare": 0.5690427168088906,
+  "flare_flipped": false,
+  "min_mac": 50
+}

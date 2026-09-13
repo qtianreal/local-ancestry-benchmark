@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "FIN",
+    "TSI"
+  ],
+  "fst": 0.011978356302137982,
+  "n_sites": 44041,
+  "gen": 30,
+  "n_ref": 92,
+  "version": "loter 1.0.1",
+  "loter": 0.6436293028087464,
+  "loter_flipped": false,
+  "loter_coverage": 1.0
+}

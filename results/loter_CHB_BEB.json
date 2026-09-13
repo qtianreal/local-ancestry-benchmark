@@ -1,0 +1,14 @@
+{
+  "pops": [
+    "CHB",
+    "BEB"
+  ],
+  "fst": 0.059218555702101244,
+  "n_sites": 45282,
+  "gen": 30,
+  "n_ref": 80,
+  "version": "loter 1.0.1",
+  "loter": 0.7847464914314739,
+  "loter_flipped": false,
+  "loter_coverage": 1.0
+}
