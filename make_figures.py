@@ -277,11 +277,22 @@ def fig1():
         ax.text(xv, 1.025, txt, fontsize=5.6, color="#555555",
                 ha="center", va="top")
 
+    # RFMix and FLARE come from a separate run over the same split times, so
+    # their measured F_ST differs from the main sweep's by replicate, by a third
+    # at the lowest level (0.0022 against 0.0030). Drawing each series at its own
+    # estimate put the released tools at different x from the methods they are
+    # compared against, which is not a difference in the data they saw and which
+    # reviewers read as an inconsistency. Every series is now placed at the main
+    # sweep's F_ST for the shared split time, the same treatment the
+    # haplotype-aware curve below already receives, so a column of points is one
+    # scenario rather than one replicate draw of it.
+    anchor_by_T = {r["split_time"]: r["fst"] for r in agg}
+
     for key, rows in (("naive_bayes", agg), ("hmm", agg), ("cnn", agg),
                       ("rfmix", ext), ("flare", ext)):
         if not rows:
             continue
-        x = np.array([r["fst"] for r in rows])
+        x = np.array([anchor_by_T.get(r["split_time"], r["fst"]) for r in rows])
         y = np.array([r.get(key) if isinstance(r.get(key), float) else np.nan
                       for r in rows], dtype=float)
         e = np.array([r.get(f"{key}_sd", 0.0) or 0.0 for r in rows], dtype=float)
