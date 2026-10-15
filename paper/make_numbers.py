@@ -807,6 +807,121 @@ def main():
         add("facLoP", "<0.001" if pv < 0.001 else f"{pv:.3f}")
         add("facLoNMig", len(m)); add("facLoNNone", len(n))
 
+    # --- Recomb-Mix and Loter in the simulated analyses ----------------------
+    # From run_sim_newtools.py (accuracy, 3 seeds) and run_sim_newtools_ext.py
+    # (tracts, breakpoints, dating, phasing, factorial), on the identical data.
+    # The existing macros above stay as they are: they describe the comparison
+    # with RFMix and FLARE, which remains true. These add the other two tools.
+    import numpy as _np
+    from scipy import stats as _sst
+    sn = (load("sim_newtools_s0.json") or []) + (load("sim_newtools_s12.json") or [])
+    exa = load("external_aggregate.json") or []
+    if sn and exa:
+        per = {}
+        for r in sn:
+            per.setdefault(r["split_time"], {})[r["seed"]] = r
+        exa_s = sorted(exa, key=lambda r: r["fst"])
+        cnn_seed = {}
+        for s in (0, 1, 2):
+            for r in (load(f"external_results_s{s}.json") or []):
+                cnn_seed[(s, r["split_time"])] = r["cnn"]
+        lo_d = []
+        for i, r in enumerate(exa_s[: len(WORDS)]):
+            T, tag = r["split_time"], f"X{WORDS[i]}"
+            rm = [per[T][s]["recombmix"] for s in sorted(per[T])]
+            lt = [per[T][s]["loter"] for s in sorted(per[T])]
+            add(f"rm{tag}", fmt(_np.mean(rm)))
+            add(f"lot{tag}", fmt(_np.mean(lt)))
+            d = [per[T][s]["recombmix"] - cnn_seed[(s, T)] for s in sorted(per[T])]
+            add(f"rmGap{tag}", f"{_np.mean(d):+.3f}")
+            add(f"rmGapP{tag}", fmt(_sst.ttest_1samp(d, 0).pvalue, 3))
+            if r["fst"] < 0.015:
+                lo_d += d
+        add("rmSimNSeeds", len({r["seed"] for r in sn}))
+        add("rmSimLoMean", f"{_np.mean(lo_d):+.3f}")
+        add("rmSimLoPos", sum(1 for v in lo_d if v > 0))
+        add("rmSimLoN", len(lo_d))
+        add("rmSimLoP", fmt(_sst.ttest_1samp(lo_d, 0).pvalue, 3))
+        low = exa_s[0]
+        best7 = max([low[k] for k in ("naive_bayes", "hmm", "rfmix", "flare", "cnn")]
+                    + [_np.mean([per[low["split_time"]][s][k] for s in per[low["split_time"]]])
+                       for k in ("recombmix", "loter")])
+        add("simBestAllLo", fmt(best7))
+
+    tn = load("sim_newtools_tracts.json")
+    if tn:
+        for m, s in (("recombmix", "RM"), ("loter", "LOT")):
+            add(f"tractN{s}", fmt(_np.mean([r[m]["n_tract_ratio"] for r in tn]), 1))
+            add(f"tractLen{s}", fmt(_np.mean([r[m]["length_ratio"] for r in tn]), 2))
+            g = _np.mean([r[m]["g_hat"] for r in tn])
+            add(f"date{s}", fmt(g, 0))
+            add(f"dateRatio{s}", fmt(g / _np.mean([r["truth_g_hat"] for r in tn]), 1))
+            add(f"bpFOne{s}", fmt(_np.mean([r[m]["f1_1000kb"] for r in tn]), 2))
+    bp = load("bp_prf.json")
+    if bp:
+        for m, s in (("naive_bayes", "NB"), ("hmm", "HMM"), ("rfmix", "RF"),
+                     ("flare", "FL"), ("cnn", "CNN"), ("cnn_haplo", "CNNH")):
+            v = [r[m]["f1_1000kb"] for r in bp if m in r]
+            if v:
+                add(f"bpFOne{s}", fmt(_np.mean(v), 2))
+
+    pn = load("sim_newtools_phasing.json")
+    ph0 = load("phasing_results.json")
+    if pn and ph0:
+        for T, tag in zip(sorted({r["split_time"] for r in pn}), ["Lo", "Hi"]):
+            cells = {r["switch_per_mb"]: r for r in pn if r["split_time"] == T}
+            old = {r["switch_per_mb"]: r for r in ph0 if r["split_time"] == T}
+            rates = sorted(cells)
+            for m, s in (("recombmix", "RM"), ("loter", "LOT")):
+                for rt in rates:
+                    key = "Zero" if rt == 0 else ("Half" if rt < 1 else "Two")
+                    add(f"phase{s}{key}{tag}", fmt(cells[rt][m]))
+                add(f"phase{s}Drop{tag}", fmt(cells[rates[-1]][m] - cells[rates[0]][m]))
+            # rate at which any of the four released tools first exceeds the network
+            flip = next((rt for rt in rates if max(old[rt]["rfmix"], old[rt]["flare"],
+                         cells[rt]["recombmix"], cells[rt]["loter"]) > old[rt]["cnn"]), None)
+            add(f"phaseFlipAll{tag}", fmt(flip, 1) if flip is not None else "none")
+
+    fn = load("sim_newtools_factorial.json")
+    if fn and fac:
+        nf = {(r["condition"], r["split_time"], r["seed"]): r for r in fn}
+        for r in fac:
+            n = nf[(r["condition"], r["split_time"], r["seed"])]
+            r["_rm"], r["_lot"] = n["recombmix"], n["loter"]
+            r["_gap4"] = r["cnn"] - max(v for v in (r["rfmix"], r["flare"],
+                                                     n["recombmix"], n["loter"]) if v is not None)
+        tagc = {"toy": "Toy", "migration": "Mig", "geneticmap": "Map", "both": "Both"}
+        for c, Ts in ((c, sorted({r["split_time"] for r in fac if r["condition"] == c}))
+                      for c in tagc):
+            for j, T in enumerate(Ts):
+                cell = [r for r in fac if r["condition"] == c and r["split_time"] == T]
+                k = f"{tagc[c]}{WORDS[j]}"
+                add(f"facRM{k}", fmt(_np.mean([r["_rm"] for r in cell])))
+                add(f"facLOT{k}", fmt(_np.mean([r["_lot"] for r in cell])))
+                add(f"facGapAll{k}", f"{_np.mean([r['_gap4'] for r in cell]):+.3f}")
+                add(f"facGapAllSD{k}", fmt(_np.std([r["_gap4"] for r in cell], ddof=1)))
+        add("facWinsTwo", sum(1 for r in fac if r["gap"] > 0))
+        add("facWinsAll", sum(1 for r in fac if r["_gap4"] > 0))
+        X = _np.column_stack([_np.ones(len(fac)), [r["fst"] for r in fac],
+                              [1.0 if r["migration"] > 0 else 0.0 for r in fac],
+                              [1.0 if r["genetic_map"] else 0.0 for r in fac]])
+        y = _np.array([r["_gap4"] for r in fac])
+        beta, *_ = _np.linalg.lstsq(X, y, rcond=None)
+        resid = y - X @ beta
+        se = _np.sqrt(_np.diag(_np.linalg.inv(X.T @ X) * (resid @ resid)
+                               / (len(y) - X.shape[1])))
+        for i, nm in ((2, "Mig"), (3, "Map")):
+            pv = 2 * (1 - _sst.t.cdf(abs(beta[i] / se[i]), len(y) - 4))
+            add(f"fac{nm}AllBeta", f"{beta[i]:+.3f}")
+            add(f"fac{nm}AllSE", fmt(se[i]))
+            add(f"fac{nm}AllP", "<0.001" if pv < 0.001 else f"{pv:.3f}")
+        m = [r["_gap4"] for r in fac if r["fst"] < 0.007 and r["migration"] > 0]
+        n = [r["_gap4"] for r in fac if r["fst"] < 0.007 and r["migration"] == 0]
+        pv = _sst.ttest_ind(m, n, equal_var=False).pvalue
+        add("facLoAllMig", f"{_np.mean(m):+.3f}")
+        add("facLoAllNone", f"{_np.mean(n):+.3f}")
+        add("facLoAllP", "<0.001" if pv < 0.001 else f"{pv:.3f}")
+
     # --- 95% confidence intervals on the headline paired comparisons ---------
     # Reviewers read effect sizes off intervals, not standard deviations, and
     # for the released tools the interval is the honest summary: the direction

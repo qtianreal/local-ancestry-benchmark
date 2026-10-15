@@ -38,6 +38,7 @@ RES = HERE / "results"
 RHO = 1e-8   # per base per generation, the rate used in both arms
 G = 30       # generations since the admixture pulse, fixed by the design
 METHODS = ("naive_bayes", "hmm", "rfmix", "flare", "cnn")
+NEW_TOOLS = ("recombmix", "loter")   # run in both arms since the second revision
 
 
 def phi(z):
@@ -58,8 +59,12 @@ def inv_phi(p, k):
 
 def collect():
     rows = []
+    # Seed 0 of the simulated sweep, the replicate external_results.json holds.
+    simnew = {r["split_time"]: r for r in
+              json.loads((RES / "sim_newtools_s0.json").read_text())}
     for r in json.loads((RES / "external_results.json").read_text()):
         acc = {k: r[k] for k in METHODS if k in r}
+        acc.update({k: simnew[r["split_time"]][k] for k in NEW_TOOLS})
         rows.append(dict(arm="sim", label=f"T={r['split_time']}", fst=r["fst"],
                          n_sites=r["n_sites"], span=10e6, acc=acc))
     for f in sorted(glob.glob(str(RES / "real_*.json"))):
@@ -72,6 +77,8 @@ def collect():
         if ext.exists():
             e = json.loads(ext.read_text())
             acc.update({k: e[k] for k in ("rfmix", "flare") if k in e})
+        for k in NEW_TOOLS:
+            acc[k] = json.loads((RES / f"{k}_{tag}.json").read_text())[k]
         rows.append(dict(arm="real", label="/".join(d["pops"]), fst=d["fst"],
                          n_sites=d["n_sites"], span=d["end"] - d["start"], acc=acc))
     for r in rows:

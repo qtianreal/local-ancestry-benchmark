@@ -252,13 +252,24 @@ def fig0():
 
 
 def fig1():
-    """Accuracy against divergence for all five methods."""
+    """Accuracy against divergence for every method run on the simulated series."""
     agg = load("aggregate_results.json") or []
     ext = load("external_aggregate.json") or load("external_results.json") or []
     if not agg:
         return
     agg = sorted(agg, key=lambda r: r["fst"])
     ext = sorted(ext, key=lambda r: r["fst"])
+
+    # Recomb-Mix and Loter: same 3 seeds and split times as RFMix and FLARE.
+    sn = (load("sim_newtools_s0.json") or []) + (load("sim_newtools_s12.json") or [])
+    newt = []
+    for T in sorted({r["split_time"] for r in sn}):
+        cell = [r for r in sn if r["split_time"] == T]
+        row = {"split_time": T, "fst": np.mean([r["fst"] for r in cell])}
+        for k in ("recombmix", "loter"):
+            v = [r[k] for r in cell]
+            row[k], row[f"{k}_sd"] = float(np.mean(v)), float(np.std(v, ddof=1))
+        newt.append(row)
 
     fig, ax = plt.subplots(figsize=(5.4, 3.6))
     fst_all = [r["fst"] for r in agg] + [r["fst"] for r in ext]
@@ -289,7 +300,8 @@ def fig1():
     anchor_by_T = {r["split_time"]: r["fst"] for r in agg}
 
     for key, rows in (("naive_bayes", agg), ("hmm", agg), ("cnn", agg),
-                      ("rfmix", ext), ("flare", ext)):
+                      ("rfmix", ext), ("flare", ext),
+                      ("recombmix", newt), ("loter", newt)):
         if not rows:
             continue
         x = np.array([anchor_by_T.get(r["split_time"], r["fst"]) for r in rows])
@@ -332,7 +344,8 @@ def fig1():
     # Legend order is set explicitly rather than by plot order, so the two
     # configurations of the network sit together and the grouping reads by
     # family: our likelihood baselines, the released tools, then the network.
-    order = ["naive_bayes", "hmm", "rfmix", "flare", "cnn", "cnn_haplo"]
+    order = ["naive_bayes", "hmm", "rfmix", "flare", "recombmix", "loter",
+             "cnn", "cnn_haplo"]
     handles, labels = ax.get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     keep = [LAB[k] for k in order if LAB[k] in by_label]
@@ -809,7 +822,14 @@ def figS_bpprf():
     rows.sort(key=lambda r: r["fst"])
     fst = np.array([r["fst"] for r in rows])
     fig, ax = plt.subplots(figsize=(5.2, 3.6))
-    for k in ("naive_bayes", "hmm", "rfmix", "flare", "cnn", "cnn_haplo"):
+    # Recomb-Mix and Loter on the identical seed-0 replicate (run_sim_newtools_ext.py).
+    tn = {r["split_time"]: r for r in (load("sim_newtools_tracts.json") or [])}
+    for r in rows:
+        for k in ("recombmix", "loter"):
+            if r["split_time"] in tn:
+                r[k] = tn[r["split_time"]][k]
+    for k in ("naive_bayes", "hmm", "rfmix", "flare", "recombmix", "loter",
+              "cnn", "cnn_haplo"):
         y = np.array([r[k]["f1_1000kb"] if k in r else np.nan for r in rows])
         ax.plot(fst, y, marker=MARK.get(k, "o"), ms=4, lw=1.3,
                 color=COL[k], label=LAB[k])
