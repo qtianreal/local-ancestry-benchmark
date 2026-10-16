@@ -822,11 +822,12 @@ def main():
         for r in sn:
             per.setdefault(r["split_time"], {})[r["seed"]] = r
         exa_s = sorted(exa, key=lambda r: r["fst"])
-        cnn_seed = {}
+        cnn_seed, hmm_best_seed = {}, {}
         for s in (0, 1, 2):
             for r in (load(f"external_results_s{s}.json") or []):
                 cnn_seed[(s, r["split_time"])] = r["cnn"]
-        lo_d = []
+                hmm_best_seed[(s, r["split_time"])] = max(r["rfmix"], r["flare"])
+        lo_d, lo_rm_b, lo_lot_b = [], [], []
         for i, r in enumerate(exa_s[: len(WORDS)]):
             T, tag = r["split_time"], f"X{WORDS[i]}"
             rm = [per[T][s]["recombmix"] for s in sorted(per[T])]
@@ -838,6 +839,12 @@ def main():
             add(f"rmGapP{tag}", fmt(_sst.ttest_1samp(d, 0).pvalue, 3))
             if r["fst"] < 0.015:
                 lo_d += d
+                lo_rm_b += [per[T][s]["recombmix"] - hmm_best_seed[(s, T)] for s in sorted(per[T])]
+                lo_lot_b += [per[T][s]["loter"] - hmm_best_seed[(s, T)] for s in sorted(per[T])]
+        # Same pooled levels, against the better of RFMix and FLARE, so the
+        # simulated margin can be set beside the real-pair rmLoDelta/lotLoDelta.
+        add("rmSimLoBest", f"{_np.mean(lo_rm_b):+.3f}")
+        add("lotSimLoBest", f"{_np.mean(lo_lot_b):+.3f}")
         add("rmSimNSeeds", len({r["seed"] for r in sn}))
         add("rmSimLoMean", f"{_np.mean(lo_d):+.3f}")
         add("rmSimLoPos", sum(1 for v in lo_d if v > 0))
@@ -1174,8 +1181,10 @@ def main():
         if not ep.exists() or not isinstance(d.get("recombmix"), float):
             continue
         e = json.loads(ep.read_text())
+        lp = RES / f"loter_{tag}.json"
         rmrows.append({"pops": d["pops"], "fst": d["fst"], "rm": d["recombmix"],
-                       "other": max(e["rfmix"], e["flare"])})
+                       "other": max(e["rfmix"], e["flare"]),
+                       "lot": json.loads(lp.read_text()).get("loter") if lp.exists() else None})
     rmrows.sort(key=lambda r: r["fst"])
     if rmrows:
         add("rmVersion", "V0.8")
@@ -1191,6 +1200,9 @@ def main():
             add("rmLoN", len(lo))
             add("rmLoLeads", sum(1 for r in lo if r["rm"] > r["other"]))
             add("rmLoDelta", f"{_np.mean([r['rm'] - r['other'] for r in lo]):+.3f}")
+            lot_lo = [r["lot"] - r["other"] for r in lo if r["lot"] is not None]
+            if lot_lo:
+                add("lotLoDelta", f"{_np.mean(lot_lo):+.3f}")
         if hi:
             add("rmHiN", len(hi))
             add("rmHiLeads", sum(1 for r in hi if r["rm"] > r["other"]))
