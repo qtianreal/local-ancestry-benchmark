@@ -426,7 +426,7 @@ def fig3():
         inside = np.array([r["fst"] for r in agg])[adv >= 0.8 * adv.max()]
         ax.axvspan(inside.min(), inside.max(), color="#009E73", alpha=0.09,
                    lw=0, zorder=0)
-        ax.annotate("band of maximum\nadvantage over baselines",
+        ax.annotate("band of maximum\nadvantage over Likelihood + HMM",
                     xy=(float(np.sqrt(inside.min() * inside.max())), 1.40),
                     ha="center", va="top", fontsize=5.4, color="#4A7A68",
                     linespacing=1.3)
