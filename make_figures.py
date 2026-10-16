@@ -129,7 +129,7 @@ def fig0():
     ax.text(6, 6.4, "ticks mark variant sites", fontsize=5.8, color="#888888",
             ha="left", va="top")
 
-    # Every experiment in the paper scores these six on identical data; the
+    # Every experiment in the paper scores these methods on identical data; the
     # released tools in particular were not visible anywhere in this figure.
     ax.text(71, 2.65, "scored on every experiment", ha="center", fontsize=5.8,
             color="#555555")
@@ -140,10 +140,10 @@ def fig0():
     # closest candidates we tested collapse onto "Likelihood + HMM" at dE 5-8
     # -- so the methods are listed by name and carry their colours in Figs 2,
     # 4 and 5, where each is actually plotted.
-    meth = ["Window likelihood", "Likelihood + HMM", "RFMix v2",
-            "FLARE", "Dilated CNN", "+ haplotype channels"]
+    meth = ["Window likelihood", "Likelihood + HMM", "Dilated CNN",
+            "+ haplotype channels", "RFMix v2", "FLARE", "Recomb-Mix", "Loter"]
     for i, lab in enumerate(meth):
-        ax.text(50 + (i % 3) * 15.5, 1.5 - (i // 3) * 1.1, lab,
+        ax.text(46 + (i % 4) * 13.5, 1.5 - (i // 4) * 1.1, lab,
                 fontsize=5.6, va="center", ha="left", color="#444444")
 
     ax.text(0, 13.5, "a", fontsize=9, fontweight="bold", va="top")
@@ -747,7 +747,7 @@ def fig6():
                    marker=mk, label=lab, zorder=3, edgecolor="white", linewidth=0.4)
     ax.axhline(0.5, color="#BBBBBB", lw=0.7, ls="--", zorder=0)
     ax.set_xscale("log")
-    ax.set_xlabel(r"identifiability index  $x=\delta F_{ST}/g$  (sites per tract $\times$ $F_{ST}$)")
+    ax.set_xlabel(r"index  $x=\delta F_{ST}/g$  (sites per tract $\times$ $F_{ST}$)")
     ax.set_ylabel("best per-site accuracy")
     ax.set_ylim(0.45, 1.02)
     ax.grid(axis="y", color="#EEEEEE", lw=0.6, zorder=0)
