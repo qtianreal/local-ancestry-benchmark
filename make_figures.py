@@ -182,7 +182,7 @@ def fig0():
     SHORT = {"attn": "Self-attention", "ssm": "State-space layer",
              "cap": "Capacity, 15$\\times$ params",
              "lda": "Discriminant objective",
-             "ssl": "Self-sup. pretrain", "more": "More labelled data",
+             "ssl": "Self-sup. pretrain", "more": "More labeled data",
              "simhaplo": "Simulation pretrain (hap.)",
              "input": "Haplotype input"}
     # The frequency-only pretraining arm is excluded here and reported in

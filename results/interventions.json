@@ -59,7 +59,7 @@
   },
   {
     "tag": "more",
-    "label": "More labelled data",
+    "label": "More labeled data",
     "pair": "CHB/CDX",
     "kind": "training",
     "n": 3,

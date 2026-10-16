@@ -33,7 +33,7 @@ ARMS = [
      "haplo", "haplo+lda", "TSI/PJL", "objective"),
     ("ssl", "Self-supervised pretraining", "tuning/ssl_CHB_CDX_haplo.json",
      "base", "ssl+base", "CHB/CDX", "training"),
-    ("more", "More labelled data", "tuning/ssl_CHB_CDX_haplo.json",
+    ("more", "More labeled data", "tuning/ssl_CHB_CDX_haplo.json",
      "base", "more", "CHB/CDX", "training"),
 ]
 
