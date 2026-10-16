@@ -1324,6 +1324,8 @@ def main():
         print(f"  MISSING (placeholder emitted): {n}", file=sys.stderr)
 
     for name, value in defined.items():
+        if not value.startswith("$"):
+            value = re.sub(r"-(?=\d)", r"\\ensuremath{-}", value)
         lines.append(rf"\newcommand{{\{name}}}{{{value}}}")
     OUT.write_text("\n".join(lines) + "\n")
     print(f"wrote {OUT} ({len(defined)} macros)")
