@@ -37,7 +37,8 @@ def main():
     defined = {}
 
     def add(name, value):
-        defined[name] = str(value)
+        # A value that rounds to zero has no sign; "-0.000" reads as a loss.
+        defined[name] = re.sub(r"^(\$?)-(0\.0+)(\$?)$", r"\1\2\3", str(value))
 
     # --- main sweep: prefer the seed-aggregated file -------------------------
     agg = load("aggregate_results.json")
